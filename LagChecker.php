@@ -45,7 +45,7 @@ extends ErebotModuleBase
                     try {
                         $this->removeTimer($this->$timer);
                     }
-                    catch (EErebotNotFound $e) {}
+                    catch (Erebot_ExceptionNotFound $e) {}
                     unset($this->$timer);
                     $this->$timer = NULL;
                 }
@@ -208,14 +208,14 @@ it takes for a message from the bot to go to the IRC server and back.
             if ($this->_timerPing !== NULL)
                 $this->removeTimer($this->_timerPing);
         }
-        catch (EErebot $e) {
+        catch (Erebot_Exception $e) {
         }
 
         try {
             if ($this->_timerPong !== NULL)
                 $this->removeTimer($this->_timerPong);
         }
-        catch (EErebot $e) {
+        catch (Erebot_Exception $e) {
         }
 
         unset($this->_timerPing, $this->_timerPong);
@@ -241,7 +241,7 @@ it takes for a message from the bot to go to the IRC server and back.
             unset($this->_timerQuit);
             $this->_timerQuit   = NULL;
         }
-        catch (EErebotConnectionFailure $e) {}
+        catch (Erebot_ExceptionConnectionFailure $e) {}
     }
 
     public function getLag()
@@ -289,7 +289,7 @@ it takes for a message from the bot to go to the IRC server and back.
                                     ErebotConnection::MODULE_BY_NAME);
                 $registry->freeTriggers($this->_trigger);
             }
-            catch (EErebot $e) {
+            catch (Erebot_Exception $e) {
             }
         }
     }
