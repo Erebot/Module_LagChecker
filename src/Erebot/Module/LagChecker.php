@@ -16,11 +16,14 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class   ErebotModule_LagChecker
-extends ErebotModuleBase
+class   Erebot_Module_LagChecker
+extends Erebot_Module_Base
 {
     static protected $_metadata = array(
-        'requires'  =>  array('TriggerRegistry', 'Helper'),
+        'requires'  =>  array(
+            'Erebot_Module_TriggerRegistry',
+            'Erebot_Module_Helper',
+        ),
     );
     protected $_timerPing;
     protected $_timerPong;
@@ -67,23 +70,25 @@ extends ErebotModuleBase
 
         if ($flags & self::RELOAD_HANDLERS) {
             $handlers = array(
-                            'handlePong'        => 'ErebotEventPong',
-                            'handleExit'        => 'ErebotEventExit',
-                            'handleConnect'     => 'ErebotEventConnect',
+                            'handlePong'        => 'Erebot_Event_Pong',
+                            'handleExit'        => 'Erebot_Event_Exit',
+                            'handleConnect'     => 'Erebot_Event_Connect',
                         );
 
             foreach ($handlers as $callback => $event_type) {
-                $handler    =   new ErebotEventHandler(
+                $handler    =   new Erebot_EventHandler(
                                     array($this, $callback),
                                     $event_type);
                 $this->_connection->addEventHandler($handler);
             }
 
-            $registry   =   $this->_connection->getModule('TriggerRegistry',
-                                    ErebotConnection::MODULE_BY_NAME);
+            $registry   =   $this->_connection->getModule(
+                'Erebot_Module_TriggerRegistry',
+                Erebot_Connection::MODULE_BY_NAME
+            );
 
             $trigger    = $this->parseString('trigger', 'lag');
-            $matchAny  = ErebotUtils::getVStatic($registry, 'MATCH_ANY');
+            $matchAny  = Erebot_Utils::getVStatic($registry, 'MATCH_ANY');
 
             $this->_trigger  =   $registry->registerTriggers(
                 $trigger, $matchAny);
@@ -91,22 +96,22 @@ extends ErebotModuleBase
                 throw new Exception($this->_translator->gettext(
                     'Unable to register trigger for Lag Checker'));
 
-            $filter         =   new ErebotTextFilter(
+            $filter         =   new Erebot_TextFilter(
                                     $this->_mainCfg,
-                                    ErebotTextFilter::TYPE_STATIC,
+                                    Erebot_TextFilter::TYPE_STATIC,
                                     $trigger, TRUE);
-            $handler        =   new ErebotEventHandler(
+            $handler        =   new Erebot_EventHandler(
                                     array($this, 'handleGetLag'),
-                                    'iErebotEventMessageText',
+                                    'Erebot_Interface_Event_TextMessage',
                                     NULL, $filter);
             $this->_connection->addEventHandler($handler);
             $this->registerHelpMethod(array($this, 'getHelp'));
         }
     }
 
-    public function getHelp(iErebotEventMessageText &$event, $words)
+    public function getHelp(Erebot_Interface_Event_TextMessage &$event, $words)
     {
-        if ($event instanceof iErebotEventPrivate) {
+        if ($event instanceof Erebot_Interface_Event_Private) {
             $target = $event->getSource();
             $chan   = NULL;
         }
@@ -125,7 +130,7 @@ extends ErebotModuleBase
 Provides the <b><var name="trigger"/></b> command which prints
 the current lag.
 ');
-            $formatter = new ErebotStyling($msg, $translator);
+            $formatter = new Erebot_Styling($msg, $translator);
             $formatter->assign('trigger', $trigger);
             $this->sendMessage($target, $formatter->render());
             return TRUE;
@@ -140,7 +145,7 @@ the current lag.
 Display the latency of the connection, that is, the number of seconds
 it takes for a message from the bot to go to the IRC server and back.
 ");
-            $formatter = new ErebotStyling($msg, $translator);
+            $formatter = new Erebot_Styling($msg, $translator);
             $formatter->assign('trigger', $trigger);
             $this->sendMessage($target, $formatter->render());
 
@@ -148,9 +153,9 @@ it takes for a message from the bot to go to the IRC server and back.
         }
     }
 
-    public function checkLag(ErebotTimer &$timer)
+    public function checkLag(Erebot_Timer &$timer)
     {
-        $this->_timerPong   =   new ErebotTimer(
+        $this->_timerPong   =   new Erebot_Timer(
                                     array($this, 'disconnect'),
                                     $this->_delayPong, FALSE);
         $this->addTimer($this->_timerPong);
@@ -160,7 +165,7 @@ it takes for a message from the bot to go to the IRC server and back.
         $this->sendCommand('PING '.$this->_lastSent);
     }
 
-    public function handlePong(iErebotEvent &$event)
+    public function handlePong(Erebot_Interface_Event_Generic &$event)
     {
         if ($event->getText() != ((string) $this->_lastSent))
             return;
@@ -171,7 +176,7 @@ it takes for a message from the bot to go to the IRC server and back.
         $this->_timerPong = NULL;
     }
 
-    public function handleExit(iErebotEvent &$event)
+    public function handleExit(Erebot_Interface_Event_Generic &$event)
     {
         if ($this->_timerPing) {
             $this->removeTimer($this->_timerPing);
@@ -184,12 +189,12 @@ it takes for a message from the bot to go to the IRC server and back.
         }
     }
 
-    public function disconnect(iErebotTimer &$timer)
+    public function disconnect(Erebot_Interface_Timer &$timer)
     {
         $this->_connection->disconnect();
 
         $config     =&  $this->_connection->getConfig(NULL);
-        $logging    =&  ErebotLogging::getInstance();
+        $logging    =&  Plop::getInstance();
         $logger     =   $logging->getLogger(__FILE__);
         $logger->info($this->_translator->gettext(
             'Lag got too high for "%(server)s" ... '.
@@ -199,7 +204,7 @@ it takes for a message from the bot to go to the IRC server and back.
                 'delay'     => $this->_delayReco,
             ));
 
-        $this->_timerQuit   =   new ErebotTimer(
+        $this->_timerQuit   =   new Erebot_Timer(
                                     array($this, 'reconnect'),
                                     $this->_delayReco, TRUE);
         $this->addTimer($this->_timerQuit);
@@ -223,10 +228,10 @@ it takes for a message from the bot to go to the IRC server and back.
         $this->_timerPong   = NULL;
     }
 
-    public function reconnect(iErebotTimer &$timer)
+    public function reconnect(Erebot_Interface_Timer &$timer)
     {
         $config     =&  $this->_connection->getConfig(NULL);
-        $logging    =&  ErebotLogging::getInstance();
+        $logging    =&  Plop::getInstance();
         $logger     =   $logging->getLogger(__FILE__);
         $logger->info($this->_translator->gettext(
                         'Attempting reconnection to "%s"'),
@@ -251,9 +256,9 @@ it takes for a message from the bot to go to the IRC server and back.
         return ($this->_lastRcvd - $this->_lastSent);
     }
 
-    public function handleGetLag(iErebotEventMessageText &$event)
+    public function handleGetLag(Erebot_Interface_Event_TextMessage &$event)
     {
-        if ($event instanceof iErebotEventPrivate) {
+        if ($event instanceof Erebot_Interface_Event_Private) {
             $target = $event->getSource();
             $chan   = NULL;
         }
@@ -269,15 +274,15 @@ it takes for a message from the bot to go to the IRC server and back.
         else {
             $msg = $translator->gettext(
                 'Current lag: <var name="lag"/> seconds');
-            $formatter = new ErebotStyling($msg, $translator);
+            $formatter = new Erebot_Styling($msg, $translator);
             $formatter->assign('lag', $lag);
             $this->sendMessage($target, $formatter->render());
         }
     }
 
-    public function handleConnect(iErebotEvent &$event)
+    public function handleConnect(Erebot_Interface_Event_Generic &$event)
     {
-        $this->_timerPing   =   new ErebotTimer(
+        $this->_timerPing   =   new Erebot_Timer(
                                     array($this, 'checkLag'),
                                     $this->_delayPing, TRUE);
         $this->addTimer($this->_timerPing);
@@ -285,8 +290,8 @@ it takes for a message from the bot to go to the IRC server and back.
         if ($this->_trigger !== NULL) {
             try {
                 $registry   =   $this->_connection->getModule(
-                                    'TriggerRegistry',
-                                    ErebotConnection::MODULE_BY_NAME);
+                                    'Erebot_Module_TriggerRegistry',
+                                    Erebot_Connection::MODULE_BY_NAME);
                 $registry->freeTriggers($this->_trigger);
             }
             catch (Erebot_Exception $e) {
