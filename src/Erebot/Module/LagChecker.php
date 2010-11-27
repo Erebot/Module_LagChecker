@@ -83,8 +83,7 @@ extends Erebot_Module_Base
             }
 
             $registry   =   $this->_connection->getModule(
-                'Erebot_Module_TriggerRegistry',
-                Erebot_Connection::MODULE_BY_NAME
+                'Erebot_Module_TriggerRegistry'
             );
 
             $trigger    = $this->parseString('trigger', 'lag');
@@ -122,7 +121,7 @@ extends Erebot_Module_Base
         $trigger    = $this->parseString('trigger', 'lag');
 
         $bot        =&  $this->_connection->getBot();
-        $moduleName =   strtolower($bot->moduleClassToName($this));
+        $moduleName =   strtolower(get_class());
         $nbArgs     =   count($words);
 
         if ($nbArgs == 1 && $words[0] == $moduleName) {
@@ -290,8 +289,8 @@ it takes for a message from the bot to go to the IRC server and back.
         if ($this->_trigger !== NULL) {
             try {
                 $registry   =   $this->_connection->getModule(
-                                    'Erebot_Module_TriggerRegistry',
-                                    Erebot_Connection::MODULE_BY_NAME);
+                    'Erebot_Module_TriggerRegistry'
+                );
                 $registry->freeTriggers($this->_trigger);
             }
             catch (Erebot_Exception $e) {
