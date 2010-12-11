@@ -14,15 +14,5 @@
         <exclude name="testenv/**/*.php"/>
     </fileset>
 
-    <target name="qa_test" description="" depends="qa_pre_coverage">
-        <phpunit
-            codecoverage="true"
-            bootstrap="../../../autoloader.php"
-            >
-            <formatter type="plain" usefile="false"/>
-            <batchtest><fileset refid="tests"/></batchtest>
-        </phpunit>
-    </target>
-
     <import file="buildenv/build.xml"/>
 </project>
