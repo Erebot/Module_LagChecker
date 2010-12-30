@@ -95,14 +95,12 @@ extends Erebot_Module_Base
                 throw new Exception($this->_translator->gettext(
                     'Unable to register trigger for Lag Checker'));
 
-            $filter         =   new Erebot_TextFilter(
-                                    $this->_mainCfg,
-                                    Erebot_TextFilter::TYPE_STATIC,
-                                    $trigger, TRUE);
-            $handler        =   new Erebot_EventHandler(
-                                    array($this, 'handleGetLag'),
-                                    'Erebot_Interface_Event_TextMessage',
-                                    NULL, $filter);
+            $handler = new Erebot_EventHandler(
+                array($this, 'handleGetLag'),
+                'Erebot_Interface_Event_TextMessage',
+                NULL,
+                new Erebot_TextFilter_Static($trigger, TRUE)
+            );
             $this->_connection->addEventHandler($handler);
             $this->registerHelpMethod(array($this, 'getHelp'));
         }
