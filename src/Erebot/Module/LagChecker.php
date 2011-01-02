@@ -75,10 +75,11 @@ extends Erebot_Module_Base
                             'handleConnect'     => 'Erebot_Event_Connect',
                         );
 
-            foreach ($handlers as $callback => $event_type) {
+            foreach ($handlers as $callback => $eventType) {
                 $handler    =   new Erebot_EventHandler(
-                                    array($this, $callback),
-                                    $event_type);
+                    array($this, $callback),
+                    new Erebot_Event_Match_InstanceOf($eventType)
+                );
                 $this->_connection->addEventHandler($handler);
             }
 
