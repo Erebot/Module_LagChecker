@@ -97,9 +97,10 @@ extends Erebot_Module_Base
 
             $handler = new Erebot_EventHandler(
                 array($this, 'handleGetLag'),
-                'Erebot_Interface_Event_TextMessage',
-                NULL,
-                new Erebot_TextFilter_Static($trigger, TRUE)
+                new Erebot_Event_Match_All(
+                    new Erebot_Event_Match_InstanceOf('Erebot_Interface_Event_TextMessage'),
+                    new Erebot_Event_Match_TextStatic($trigger, TRUE)
+                )
             );
             $this->_connection->addEventHandler($handler);
             $this->registerHelpMethod(array($this, 'getHelp'));
