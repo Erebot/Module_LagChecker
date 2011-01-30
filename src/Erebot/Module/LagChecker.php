@@ -38,7 +38,7 @@ extends Erebot_Module_Base
 
     protected $_trigger;
 
-    public function reload($flags)
+    public function _reload($flags)
     {
         if ($flags & self::RELOAD_MEMBERS) {
             if (!($flags & self::RELOAD_INIT)) {
@@ -105,6 +105,21 @@ extends Erebot_Module_Base
             );
             $this->_connection->addEventHandler($handler);
             $this->registerHelpMethod(array($this, 'getHelp'));
+        }
+    }
+
+    public function _unload()
+    {
+        $timers =   array('_timerPing', '_timerPong', '_timerQuit');
+
+        foreach ($timers as $timer) {
+            try {
+                if (isset($this->$timer))
+                    $this->removeTimer($this->$timer);
+            }
+            catch (Erebot_ExceptionNotFound $e) {}
+            unset($this->$timer);
+            $this->$timer = NULL;
         }
     }
 
