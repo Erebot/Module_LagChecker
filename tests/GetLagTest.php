@@ -42,12 +42,9 @@ extends ErebotModuleTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_module = new Erebot_Module_LagCheckerTestHelper(
-            $this->_connection,
-            NULL
-        );
+        $this->_module = new Erebot_Module_LagCheckerTestHelper(NULL);
         // Would otherwise fail due to timers being used.
-        $this->_module->reload(0);
+        $this->_module->reload($this->_connection, 0);
     }
 
     public function tearDown()
