@@ -70,9 +70,9 @@ extends Erebot_Module_Base
 
         if ($flags & self::RELOAD_HANDLERS) {
             $handlers = array(
-                            'handlePong'        => 'Erebot_Event_Pong',
-                            'handleExit'        => 'Erebot_Event_Exit',
-                            'handleConnect'     => 'Erebot_Event_Connect',
+                            'handlePong'        => 'Erebot_Interface_Event_Pong',
+                            'handleExit'        => 'Erebot_Interface_Event_Exit',
+                            'handleConnect'     => 'Erebot_Interface_Event_Connect',
                         );
 
             foreach ($handlers as $callback => $eventType) {
@@ -99,7 +99,7 @@ extends Erebot_Module_Base
             $handler = new Erebot_EventHandler(
                 array($this, 'handleGetLag'),
                 new Erebot_Event_Match_All(
-                    new Erebot_Event_Match_InstanceOf('Erebot_Interface_Event_TextMessage'),
+                    new Erebot_Event_Match_InstanceOf('Erebot_Interface_Event_Base_TextMessage'),
                     new Erebot_Event_Match_TextStatic($trigger, TRUE)
                 )
             );
@@ -123,9 +123,9 @@ extends Erebot_Module_Base
         }
     }
 
-    public function getHelp(Erebot_Interface_Event_TextMessage $event, $words)
+    public function getHelp(Erebot_Interface_Event_Base_TextMessage $event, $words)
     {
-        if ($event instanceof Erebot_Interface_Event_Private) {
+        if ($event instanceof Erebot_Interface_Event_Base_Private) {
             $target = $event->getSource();
             $chan   = NULL;
         }
@@ -179,7 +179,7 @@ it takes for a message from the bot to go to the IRC server and back.
         $this->sendCommand('PING '.$this->_lastSent);
     }
 
-    public function handlePong(Erebot_Interface_Event_Generic $event)
+    public function handlePong(Erebot_Interface_Event_Pong $event)
     {
         if ($event->getText() != ((string) $this->_lastSent))
             return;
@@ -190,7 +190,7 @@ it takes for a message from the bot to go to the IRC server and back.
         $this->_timerPong = NULL;
     }
 
-    public function handleExit(Erebot_Interface_Event_Generic $event)
+    public function handleExit(Erebot_Interface_Event_Exit $event)
     {
         if ($this->_timerPing) {
             $this->removeTimer($this->_timerPing);
@@ -270,9 +270,9 @@ it takes for a message from the bot to go to the IRC server and back.
         return ($this->_lastRcvd - $this->_lastSent);
     }
 
-    public function handleGetLag(Erebot_Interface_Event_TextMessage $event)
+    public function handleGetLag(Erebot_Interface_Event_Base_TextMessage $event)
     {
-        if ($event instanceof Erebot_Interface_Event_Private) {
+        if ($event instanceof Erebot_Interface_Event_Base_Private) {
             $target = $event->getSource();
             $chan   = NULL;
         }
@@ -294,7 +294,7 @@ it takes for a message from the bot to go to the IRC server and back.
         }
     }
 
-    public function handleConnect(Erebot_Interface_Event_Generic $event)
+    public function handleConnect(Erebot_Interface_Event_Connect $event)
     {
         $this->_timerPing   =   new Erebot_Timer(
                                     array($this, 'checkLag'),
