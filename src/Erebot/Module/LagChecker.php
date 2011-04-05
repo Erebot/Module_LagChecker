@@ -208,15 +208,21 @@ it takes for a message from the bot to go to the IRC server and back.
         $this->_connection->disconnect();
 
         $config     = $this->_connection->getConfig(NULL);
+        $URIs       = $config->getConnectionURI();
+        $URI        = new Erebot_URI($URIs[count($URIs) - 1]);
         $logging    = Plop::getInstance();
         $logger     = $logging->getLogger(__FILE__);
-        $logger->info($this->_translator->gettext(
-            'Lag got too high for "%(server)s" ... '.
-            'reconnecting in %(delay)d seconds'),
+
+        $logger->info(
+            $this->_translator->gettext(
+                'Lag got too high for "%(server)s" ... '.
+                'reconnecting in %(delay)d seconds'
+            ),
             array(
-                'server'    => $config->getConnectionURL(),
+                'server'    => $URI->getHost(),
                 'delay'     => $this->_delayReco,
-            ));
+            )
+        );
 
         $this->_timerQuit   =   new Erebot_Timer(
                                     array($this, 'reconnect'),
@@ -245,11 +251,16 @@ it takes for a message from the bot to go to the IRC server and back.
     public function reconnect(Erebot_Interface_Timer $timer)
     {
         $config     = $this->_connection->getConfig(NULL);
+        $URIs       = $config->getConnectionURI();
+        $URI        = new Erebot_URI($URIs[count($URIs) - 1]);
         $logging    = Plop::getInstance();
         $logger     = $logging->getLogger(__FILE__);
-        $logger->info($this->_translator->gettext(
-                        'Attempting reconnection to "%s"'),
-                        $config->getConnectionURL());
+        $logger->info(
+            $this->_translator->gettext(
+                'Attempting reconnection to "%s"'
+            ),
+            $URI->getHost()
+        );
 
         try {
             $this->_connection->connect();
