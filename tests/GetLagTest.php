@@ -49,7 +49,7 @@ extends ErebotModuleTestCase
 
     public function tearDown()
     {
-        unset($this->_module);
+        $this->_module->unload();
         parent::setUp();
     }
 
