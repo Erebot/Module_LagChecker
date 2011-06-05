@@ -1,8 +1,9 @@
 # Doxyfile 1.5.8
 
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = ErebotModule_LagChecker
+PROJECT_NAME           = $(COMPONENT_NAME)
 PROJECT_NUMBER         = $(COMPONENT_VERSION)
+PROJECT_BRIEF          = $(COMPONENT_BRIEF)
 OUTPUT_DIRECTORY       = docs
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -30,6 +31,7 @@ ALIASES               += "i{1}=\htmlonly <em>\1</em> \endhtmlonly\latexonly\text
 ALIASES               += "b{1}=\htmlonly <strong>\1</strong> \endhtmlonly\latexonly\textbf{\1}\endlatexonly"
 ALIASES               += "FIXME=\xrefitem FIXME \"Known issues\" \"Known Issues\""
 ALIASES               += "HACK=\xrefitem HACK \"Dirty hacks\" \"Dirty Hacks\""
+ALIASES               += "format{1}=\par Format\n<tt>\1</tt>\n"
 
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
@@ -125,10 +127,7 @@ ALPHABETICAL_INDEX     = YES
 COLS_IN_ALPHA_INDEX    = 3
 
 IGNORE_PREFIX          = $ \
-                         Erebot \
-                         AErebot \
-                         iErebot \
-                         EErebot
+                         Erebot
 
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
@@ -187,7 +186,7 @@ PREDEFINED             =
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = YES
 
-GENERATE_TAGFILE       = LagChecker.tagfile
+GENERATE_TAGFILE       = $(COMPONENT_NAME).tagfile
 ALLEXTERNALS           = YES
 EXTERNAL_GROUPS        = YES
 
