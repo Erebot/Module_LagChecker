@@ -4,9 +4,9 @@
 #
 #, fuzzy
 msgid   ""
-msgstr  "Project-Id-Version: Erebot_Module_LagChecker 0.3.2\n"
-        "Report-Msgid-Bugs-To: clicky@erebot.net\n"
-        "POT-Creation-Date: 2011-06-03 22:25+0200\n"
+msgstr  "Project-Id-Version: Erebot_Module_LagChecker 0.1.1\n"
+        "Report-Msgid-Bugs-To: i18n@erebot.net\n"
+        "POT-Creation-Date: 2011-06-07 01:06+0200\n"
         "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
         "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
         "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr  "Project-Id-Version: Erebot_Module_LagChecker 0.3.2\n"
         "Content-Type: text/plain; charset=CHARSET\n"
         "Content-Transfer-Encoding: 8bit\n"
 #
-# File: /home/looksup/Documents/Erebot/modules/LagChecker/trunk/src/Erebot/Module/LagChecker.php, line: 157
+# File: src/Erebot/Module/LagChecker.php, line: 157
 msgid   "\n"
         "<b>Usage:</b> !<var name='trigger'/>.\n"
         "Display the latency of the connection, that is, the number of "
@@ -23,30 +23,30 @@ msgid   "\n"
         "back.\n"
 msgstr  ""
 #
-# File: /home/looksup/Documents/Erebot/modules/LagChecker/trunk/src/Erebot/Module/LagChecker.php, line: 143
+# File: src/Erebot/Module/LagChecker.php, line: 143
 msgid   "\n"
         "Provides the <b><var name=\"trigger\"/></b> command which prints\n"
         "the current lag.\n"
 msgstr  ""
 #
-# File: /home/looksup/Documents/Erebot/modules/LagChecker/trunk/src/Erebot/Module/LagChecker.php, line: 260
+# File: src/Erebot/Module/LagChecker.php, line: 260
 #, php-format
 msgid   "Attempting reconnection to \"%s\""
 msgstr  ""
 #
-# File: /home/looksup/Documents/Erebot/modules/LagChecker/trunk/src/Erebot/Module/LagChecker.php, line: 301
+# File: src/Erebot/Module/LagChecker.php, line: 301
 msgid   "Current lag: <var name=\"lag\"/> seconds"
 msgstr  ""
 #
-# File: /home/looksup/Documents/Erebot/modules/LagChecker/trunk/src/Erebot/Module/LagChecker.php, line: 218
+# File: src/Erebot/Module/LagChecker.php, line: 218
 msgid   "Lag got too high for \"%(server)s\" ... reconnecting in %(delay)d "
         "seconds"
 msgstr  ""
 #
-# File: /home/looksup/Documents/Erebot/modules/LagChecker/trunk/src/Erebot/Module/LagChecker.php, line: 298
+# File: src/Erebot/Module/LagChecker.php, line: 298
 msgid   "No lag measure has been done yet"
 msgstr  ""
 #
-# File: /home/looksup/Documents/Erebot/modules/LagChecker/trunk/src/Erebot/Module/LagChecker.php, line: 97
+# File: src/Erebot/Module/LagChecker.php, line: 97
 msgid   "Unable to register trigger for Lag Checker"
 msgstr  ""
