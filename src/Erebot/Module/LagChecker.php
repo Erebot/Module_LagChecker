@@ -161,11 +161,13 @@ it takes for a message from the bot to go to the IRC server and back.
         }
     }
 
-    public function checkLag(Erebot_Timer $timer)
+    public function checkLag(Erebot_Interface_Timer $timer)
     {
-        $this->_timerPong   =   new Erebot_Timer(
-                                    array($this, 'disconnect'),
-                                    $this->_delayPong, FALSE);
+        $this->_timerPong = new Erebot_Timer(
+            new Erebot_Callable(array($this, 'disconnect')),
+            $this->_delayPong,
+            FALSE
+        );
         $this->addTimer($this->_timerPong);
 
         $this->_lastSent    = microtime(TRUE);
@@ -218,9 +220,11 @@ it takes for a message from the bot to go to the IRC server and back.
             )
         );
 
-        $this->_timerQuit   =   new Erebot_Timer(
-                                    array($this, 'reconnect'),
-                                    $this->_delayReco, TRUE);
+        $this->_timerQuit = new Erebot_Timer(
+            new Erebot_Callable(array($this, 'reconnect')),
+            $this->_delayReco,
+            TRUE
+        );
         $this->addTimer($this->_timerQuit);
 
         try {
@@ -301,9 +305,11 @@ it takes for a message from the bot to go to the IRC server and back.
 
     public function handleConnect(Erebot_Interface_Event_Connect $event)
     {
-        $this->_timerPing   =   new Erebot_Timer(
-                                    array($this, 'checkLag'),
-                                    $this->_delayPing, TRUE);
+        $this->_timerPing = new Erebot_Timer(
+            new Erebot_Callable(array($this, 'checkLag')),
+            $this->_delayPing,
+            TRUE
+        );
         $this->addTimer($this->_timerPing);
 
         if ($this->_trigger !== NULL) {
