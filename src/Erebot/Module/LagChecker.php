@@ -19,12 +19,6 @@
 class   Erebot_Module_LagChecker
 extends Erebot_Module_Base
 {
-    static protected $_metadata = array(
-        'requires'  =>  array(
-            'Erebot_Module_TriggerRegistry',
-            'Erebot_Module_Helper',
-        ),
-    );
     protected $_timerPing;
     protected $_timerPong;
     protected $_timerQuit;
