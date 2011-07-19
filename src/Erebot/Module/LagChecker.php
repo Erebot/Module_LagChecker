@@ -64,14 +64,14 @@ extends Erebot_Module_Base
 
         if ($flags & self::RELOAD_HANDLERS) {
             $handlers = array(
-                            'handlePong'        => 'Erebot_Interface_Event_Pong',
-                            'handleExit'        => 'Erebot_Interface_Event_Exit',
-                            'handleConnect'     => 'Erebot_Interface_Event_Connect',
-                        );
+                'handlePong'        => 'Erebot_Interface_Event_Pong',
+                'handleExit'        => 'Erebot_Interface_Event_Exit',
+                'handleConnect'     => 'Erebot_Interface_Event_Connect',
+            );
 
             foreach ($handlers as $callback => $eventType) {
-                $handler    =   new Erebot_EventHandler(
-                    array($this, $callback),
+                $handler = new Erebot_EventHandler(
+                    new Erebot_Callable(array($this, $callback)),
                     new Erebot_Event_Match_InstanceOf($eventType)
                 );
                 $this->_connection->addEventHandler($handler);
@@ -82,18 +82,20 @@ extends Erebot_Module_Base
             );
 
             $trigger    = $this->parseString('trigger', 'lag');
-            $matchAny  = Erebot_Utils::getVStatic($registry, 'MATCH_ANY');
+            $matchAny   = Erebot_Utils::getVStatic($registry, 'MATCH_ANY');
 
-            $this->_trigger  =   $registry->registerTriggers(
+            $this->_trigger = $registry->registerTriggers(
                 $trigger, $matchAny);
             if ($this->_trigger === NULL)
                 throw new Exception($this->_translator->gettext(
                     'Unable to register trigger for Lag Checker'));
 
             $handler = new Erebot_EventHandler(
-                array($this, 'handleGetLag'),
+                new Erebot_Callable(array($this, 'handleGetLag')),
                 new Erebot_Event_Match_All(
-                    new Erebot_Event_Match_InstanceOf('Erebot_Interface_Event_Base_TextMessage'),
+                    new Erebot_Event_Match_InstanceOf(
+                        'Erebot_Interface_Event_Base_TextMessage'
+                    ),
                     new Erebot_Event_Match_TextStatic($trigger, TRUE)
                 )
             );
@@ -314,7 +316,7 @@ it takes for a message from the bot to go to the IRC server and back.
 
         if ($this->_trigger !== NULL) {
             try {
-                $registry   =   $this->_connection->getModule(
+                $registry = $this->_connection->getModule(
                     'Erebot_Module_TriggerRegistry'
                 );
                 $registry->freeTriggers($this->_trigger);
