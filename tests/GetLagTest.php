@@ -62,7 +62,7 @@ extends ErebotModuleTestCase
             'foo',
             '!lag'  // Does not matter.
         );
-        $this->_module->handleGetLag($event);
+        $this->_module->handleGetLag($this->_eventHandler, $event);
         $this->assertSame(1, count($this->_outputBuffer));
         $this->assertSame(
             "PRIVMSG foo :No lag measure has been done yet",
@@ -82,7 +82,7 @@ extends ErebotModuleTestCase
             'foo',
             '!lag'  // Does not matter.
         );
-        $this->_module->handleGetLag($event);
+        $this->_module->handleGetLag($this->_eventHandler, $event);
         $this->assertSame(1, count($this->_outputBuffer));
         $this->assertSame(
             "PRIVMSG foo :Current lag: ".$lag." seconds",
