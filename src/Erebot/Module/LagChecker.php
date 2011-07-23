@@ -86,9 +86,11 @@ extends Erebot_Module_Base
 
             $this->_trigger = $registry->registerTriggers(
                 $trigger, $matchAny);
-            if ($this->_trigger === NULL)
-                throw new Exception($this->_translator->gettext(
+            if ($this->_trigger === NULL) {
+                $translator = $this->getTranslator(FALSE);
+                throw new Exception($translator->gettext(
                     'Unable to register trigger for Lag Checker'));
+            }
 
             $handler = new Erebot_EventHandler(
                 new Erebot_Callable(array($this, 'handleGetLag')),
@@ -216,9 +218,10 @@ it takes for a message from the bot to go to the IRC server and back.
         $URI        = new Erebot_URI($URIs[count($URIs) - 1]);
         $logging    = Plop::getInstance();
         $logger     = $logging->getLogger(__FILE__);
+        $translator = $this->getTranslator(FALSE);
 
         $logger->info(
-            $this->_translator->gettext(
+            $translator->gettext(
                 'Lag got too high for "%(server)s" ... '.
                 'reconnecting in %(delay)d seconds'
             ),
@@ -261,10 +264,10 @@ it takes for a message from the bot to go to the IRC server and back.
         $URI        = new Erebot_URI($URIs[count($URIs) - 1]);
         $logging    = Plop::getInstance();
         $logger     = $logging->getLogger(__FILE__);
+        $translator = $this->getTranslator(FALSE);
+
         $logger->info(
-            $this->_translator->gettext(
-                'Attempting reconnection to "%s"'
-            ),
+            $translator->gettext('Attempting reconnection to "%s"'),
             $URI->getHost()
         );
 
