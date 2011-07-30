@@ -276,9 +276,11 @@ it takes for a message from the bot to go to the IRC server and back.
             $bot = $this->_connection->getBot();
             $bot->addConnection($this->_connection);
 
-            $this->removeTimer($this->_timerQuit);
-            unset($this->_timerQuit);
-            $this->_timerQuit   = NULL;
+            if ($this->_timerQuit !== NULL) {
+                $this->removeTimer($this->_timerQuit);
+                unset($this->_timerQuit);
+                $this->_timerQuit = NULL;
+            }
         }
         catch (Erebot_ExceptionConnectionFailure $e) {}
     }
