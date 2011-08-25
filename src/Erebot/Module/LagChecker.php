@@ -136,13 +136,14 @@ extends Erebot_Module_Base
         $bot        = $this->_connection->getBot();
         $moduleName = strtolower(get_class());
         $nbArgs     = count($words);
+        $styling    = $this->getFactory('!Styling');
 
         if ($nbArgs == 1 && $words[0] == $moduleName) {
             $msg = $translator->gettext('
 Provides the <b><var name="trigger"/></b> command which prints
 the current lag.
 ');
-            $formatter = new Erebot_Styling($msg, $translator);
+            $formatter = new $styling($msg, $translator);
             $formatter->assign('trigger', $trigger);
             $this->sendMessage($target, $formatter->render());
             return TRUE;
@@ -157,7 +158,7 @@ the current lag.
 Display the latency of the connection, that is, the number of seconds
 it takes for a message from the bot to go to the IRC server and back.
 ");
-            $formatter = new Erebot_Styling($msg, $translator);
+            $formatter = new $styling($msg, $translator);
             $formatter->assign('trigger', $trigger);
             $this->sendMessage($target, $formatter->render());
 
@@ -311,9 +312,10 @@ it takes for a message from the bot to go to the IRC server and back.
             $this->sendMessage($target, $translator->gettext(
                 'No lag measure has been done yet'));
         else {
+            $styling = $this->getFactory('!Styling');
             $msg = $translator->gettext(
                 'Current lag: <var name="lag"/> seconds');
-            $formatter = new Erebot_Styling($msg, $translator);
+            $formatter = new $styling($msg, $translator);
             $formatter->assign('lag', $lag);
             $this->sendMessage($target, $formatter->render());
         }

@@ -16,12 +16,6 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once(
-    dirname(__FILE__) .
-    DIRECTORY_SEPARATOR . 'testenv' .
-    DIRECTORY_SEPARATOR . 'bootstrap.php'
-);
-
 class   Erebot_Module_LagCheckerTestHelper
 extends Erebot_Module_LagChecker
 {
@@ -36,13 +30,59 @@ extends Erebot_Module_LagChecker
     }
 }
 
+/* Ugly hack because the module factory expects a class name
+ * and we need to customoze the behavior of an instance. */
+abstract class  ErebotStylingStub
+implements      Erebot_Interface_Styling
+{
+    static public $now;
+
+    public function render()
+    {
+        $res = (string) (self::$now + 3.14 - self::$now);
+        $res = 'Current lag: '.$res.' seconds';
+        return $res;
+    }
+}
+
 class   GetLagTest
 extends ErebotModuleTestCase
 {
+    protected function _mockPrivateText()
+    {
+        $event = $this->getMock(
+            'Erebot_Interface_Event_PrivateText',
+            array(), array(), '', FALSE, FALSE
+        );
+
+        $event
+            ->expects($this->any())
+            ->method('getConnection')
+            ->will($this->returnValue($this->_connection));
+        $event
+            ->expects($this->any())
+            ->method('getSource')
+            ->will($this->returnValue('foo'));
+        $event
+            ->expects($this->any())
+            ->method('getText')
+            ->will($this->returnValue('!lag'));
+        return $event;
+    }
+
     public function setUp()
     {
         parent::setUp();
+        $this->_now = microtime(TRUE);
         $this->_module = new Erebot_Module_LagCheckerTestHelper(NULL);
+        $mock = $this->getMockForAbstractClass(
+            'ErebotStylingStub',
+            array(), '', FALSE, FALSE
+        );
+        $cls = get_class($mock);
+        $reflector = new ReflectionClass($cls);
+        $reflector->setStaticPropertyValue('now', $this->_now);
+        $this->_module->setFactory('!Styling', $cls);
         // Would otherwise fail due to timers being used.
         $this->_module->reload($this->_connection, 0);
     }
@@ -57,11 +97,7 @@ extends ErebotModuleTestCase
     {
         $this->assertSame(NULL, $this->_module->getLag());
 
-        $event = new Erebot_Event_PrivateText(
-            $this->_connection,
-            'foo',
-            '!lag'  // Does not matter.
-        );
+        $event = $this->_mockPrivateText();
         $this->_module->handleGetLag($this->_eventHandler, $event);
         $this->assertSame(1, count($this->_outputBuffer));
         $this->assertSame(
@@ -71,17 +107,12 @@ extends ErebotModuleTestCase
 
         // Clear output buffer.
         $this->_outputBuffer = array();
-        $now = microtime(TRUE);
         // Sounds stupid, right ? But still necessary...
-        $lag = (string) ($now + 3.14 - $now);
-        $this->_module->setLastSent($now);
-        $this->_module->setLastReceived($now + 3.14);
+        $lag = (string) ($this->_now + 3.14 - $this->_now);
+        $this->_module->setLastSent($this->_now);
+        $this->_module->setLastReceived($this->_now + 3.14);
 
-        $event = new Erebot_Event_PrivateText(
-            $this->_connection,
-            'foo',
-            '!lag'  // Does not matter.
-        );
+        $event = $this->_mockPrivateText();
         $this->_module->handleGetLag($this->_eventHandler, $event);
         $this->assertSame(1, count($this->_outputBuffer));
         $this->assertSame(
