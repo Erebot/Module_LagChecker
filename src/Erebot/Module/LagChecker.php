@@ -90,9 +90,9 @@ extends Erebot_Module_Base
                 $matchAny
             );
             if ($this->_trigger === NULL) {
-                $translator = $this->getTranslator(FALSE);
+                $fmt = $this->getFormatter(FALSE);
                 throw new Exception(
-                    $translator->gettext(
+                    $fmt->_(
                         'Unable to register trigger for Lag Checker'
                     )
                 );
@@ -140,22 +140,20 @@ extends Erebot_Module_Base
         else
             $target = $chan = $event->getChan();
 
-        $translator = $this->getTranslator($chan);
+        $fmt        = $this->getFormatter($chan);
         $trigger    = $this->parseString('trigger', 'lag');
 
         $bot        = $this->_connection->getBot();
         $moduleName = strtolower(get_class());
         $nbArgs     = count($words);
-        $styling    = $this->getFactory('!Styling');
 
         if ($nbArgs == 1 && $words[0] == $moduleName) {
-            $msg = $translator->gettext(
+            $msg = $fmt->_(
                 'Provides the <b><var name="trigger"/></b> command which '.
-                'prints the current lag.'
+                'prints the current lag.',
+                array('trigger' => $trigger)
             );
-            $formatter = new $styling($msg, $translator);
-            $formatter->assign('trigger', $trigger);
-            $this->sendMessage($target, $formatter->render());
+            $this->sendMessage($target, $msg);
             return TRUE;
         }
 
@@ -163,15 +161,13 @@ extends Erebot_Module_Base
             return FALSE;
 
         if ($words[1] == $trigger) {
-            $msg = $translator->gettext(
+            $msg = $fmt->_(
                 "<b>Usage:</b> !<var name='trigger'/>. Display the latency ".
                 "of the connection, that is, the number of seconds it takes ".
-                "for a message from the bot to go to the IRC server and back."
+                "for a message from the bot to go to the IRC server and back.",
+                array('trigger' => $trigger)
             );
-            $formatter = new $styling($msg, $translator);
-            $formatter->assign('trigger', $trigger);
-            $this->sendMessage($target, $formatter->render());
-
+            $this->sendMessage($target, $msg);
             return TRUE;
         }
     }
@@ -229,16 +225,16 @@ extends Erebot_Module_Base
         $uri        = new Erebot_URI($uris[count($uris) - 1]);
         $logging    = Plop::getInstance();
         $logger     = $logging->getLogger(__FILE__);
-        $translator = $this->getTranslator(FALSE);
+        $fmt        = $this->getFormatter(FALSE);
 
         $logger->info(
-            $translator->gettext(
-                'Lag got too high for "%(server)s" ... '.
-                'reconnecting in %(delay)d seconds'
+            $fmt->_(
+                'Lag got too high for "<var name="server"/>" ... '.
+                'reconnecting in <var name="delay"/>'
             ),
             array(
                 'server'    => $uri->getHost(),
-                'delay'     => $this->_delayReco,
+                'delay'     => new Erebot_Styling_Duration($this->_delayReco),
             )
         );
 
@@ -275,11 +271,11 @@ extends Erebot_Module_Base
         $uri        = new Erebot_URI($uris[count($uris) - 1]);
         $logging    = Plop::getInstance();
         $logger     = $logging->getLogger(__FILE__);
-        $translator = $this->getTranslator(FALSE);
+        $fmt        = $this->getFormatter(FALSE);
 
         $logger->info(
-            $translator->gettext('Attempting reconnection to "%s"'),
-            $uri->getHost()
+            $fmt->_('Attempting reconnection to "<var name="server"/>"'),
+            array('server' => $uri->getHost())
         );
 
         try {
@@ -316,22 +312,20 @@ extends Erebot_Module_Base
         else
             $target = $chan = $event->getChan();
 
-        $lag        = $this->getLag();
-        $translator = $this->getTranslator($chan);
+        $lag    = $this->getLag();
+        $fmt    = $this->getFormatter($chan);
 
         if ($lag === NULL)
             $this->sendMessage(
                 $target,
-                $translator->gettext('No lag measure has been done yet')
+                $fmt->_('No lag measure has been done yet')
             );
         else {
-            $styling = $this->getFactory('!Styling');
-            $msg = $translator->gettext(
-                'Current lag: <var name="lag"/> seconds'
+            $msg = $fmt->_(
+                'Current lag: <var name="lag"/> seconds',
+                array('lag' => $lag)
             );
-            $formatter = new $styling($msg, $translator);
-            $formatter->assign('lag', $lag);
-            $this->sendMessage($target, $formatter->render());
+            $this->sendMessage($target, $msg);
         }
     }
 
