@@ -226,6 +226,7 @@ extends Erebot_Module_Base
         $logging    = Plop::getInstance();
         $logger     = $logging->getLogger(__FILE__);
         $fmt        = $this->getFormatter(FALSE);
+        $cls        = $this->getFactory('!Styling_Duration');
 
         $logger->info(
             $fmt->_(
@@ -234,7 +235,7 @@ extends Erebot_Module_Base
             ),
             array(
                 'server'    => $uri->getHost(),
-                'delay'     => new Erebot_Styling_Duration($this->_delayReco),
+                'delay'     => new $cls($this->_delayReco),
             )
         );
 
