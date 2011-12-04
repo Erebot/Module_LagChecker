@@ -30,21 +30,6 @@ extends Erebot_Module_LagChecker
     }
 }
 
-/* Ugly hack because the module factory expects a class name
- * and we need to customoze the behavior of an instance. */
-abstract class  ErebotStylingStub
-implements      Erebot_Interface_Styling
-{
-    static public $now;
-
-    public function render()
-    {
-        $res = (string) (self::$now + 3.14 - self::$now);
-        $res = 'Current lag: '.$res.' seconds';
-        return $res;
-    }
-}
-
 class   GetLagTest
 extends ErebotModuleTestCase
 {
@@ -75,14 +60,12 @@ extends ErebotModuleTestCase
         parent::setUp();
         $this->_now = microtime(TRUE);
         $this->_module = new Erebot_Module_LagCheckerTestHelper(NULL);
-        $mock = $this->getMockForAbstractClass(
-            'ErebotStylingStub',
+        $styling = $this->getMockForAbstractClass(
+            'StylingStub',
             array(), '', FALSE, FALSE
         );
-        $cls = get_class($mock);
-        $reflector = new ReflectionClass($cls);
-        $reflector->setStaticPropertyValue('now', $this->_now);
-        $this->_module->setFactory('!Styling', $cls);
+        $this->_module->setFactory('!Styling', get_class($styling));
+
         // Would otherwise fail due to timers being used.
         $this->_module->reload($this->_connection, 0);
     }
@@ -116,7 +99,7 @@ extends ErebotModuleTestCase
         $this->_module->handleGetLag($this->_eventHandler, $event);
         $this->assertSame(1, count($this->_outputBuffer));
         $this->assertSame(
-            "PRIVMSG foo :Current lag: ".$lag." seconds",
+            'PRIVMSG foo :Current lag: <var name="'.$lag.'"/> seconds',
             $this->_outputBuffer[0]
         );
     }
