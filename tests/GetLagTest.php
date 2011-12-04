@@ -31,7 +31,7 @@ extends Erebot_Module_LagChecker
 }
 
 class   GetLagTest
-extends ErebotModuleTestCase
+extends Erebot_Testenv_Module_TestCase
 {
     protected function _mockPrivateText()
     {
@@ -57,14 +57,9 @@ extends ErebotModuleTestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->_now = microtime(TRUE);
         $this->_module = new Erebot_Module_LagCheckerTestHelper(NULL);
-        $styling = $this->getMockForAbstractClass(
-            'StylingStub',
-            array(), '', FALSE, FALSE
-        );
-        $this->_module->setFactory('!Styling', get_class($styling));
+        parent::setUp();
 
         // Would otherwise fail due to timers being used.
         $this->_module->reload($this->_connection, 0);
@@ -73,7 +68,7 @@ extends ErebotModuleTestCase
     public function tearDown()
     {
         $this->_module->unload();
-        parent::setUp();
+        parent::tearDown();
     }
 
     public function testGetLag()
@@ -99,7 +94,7 @@ extends ErebotModuleTestCase
         $this->_module->handleGetLag($this->_eventHandler, $event);
         $this->assertSame(1, count($this->_outputBuffer));
         $this->assertSame(
-            'PRIVMSG foo :Current lag: <var name="'.$lag.'"/> seconds',
+            'PRIVMSG foo :Current lag: <var value="'.$lag.'"/> seconds',
             $this->_outputBuffer[0]
         );
     }
