@@ -6,7 +6,7 @@
 msgid   ""
 msgstr  "Project-Id-Version: Erebot_Module_LagChecker 0.1.1\n"
         "Report-Msgid-Bugs-To: i18n@erebot.net\n"
-        "POT-Creation-Date: 2011-09-10 08:26+0200\n"
+        "POT-Creation-Date: 2011-12-04 19:27+0100\n"
         "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
         "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
         "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,31 +15,30 @@ msgstr  "Project-Id-Version: Erebot_Module_LagChecker 0.1.1\n"
         "Content-Type: text/plain; charset=CHARSET\n"
         "Content-Transfer-Encoding: 8bit\n"
 #
-# File: src/Erebot/Module/LagChecker.php, line: 167
+# File: src/Erebot/Module/LagChecker.php, line: 165
 msgid   "<b>Usage:</b> !<var name='trigger'/>. Display the latency of the "
         "connection, that is, the number of seconds it takes for a message "
         "from the bot to go to the IRC server and back."
 msgstr  ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 281
-#, php-format
-msgid   "Attempting reconnection to \"%s\""
+# File: src/Erebot/Module/LagChecker.php, line: 278
+msgid   "Attempting reconnection to \"<var name=\"server\"/>\""
 msgstr  ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 330
+# File: src/Erebot/Module/LagChecker.php, line: 326
 msgid   "Current lag: <var name=\"lag\"/> seconds"
 msgstr  ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 236
-msgid   "Lag got too high for \"%(server)s\" ... reconnecting in %(delay)d "
-        "seconds"
+# File: src/Erebot/Module/LagChecker.php, line: 233
+msgid   "Lag got too high for \"<var name=\"server\"/>\" ... reconnecting in "
+        "<var name=\"delay\"/>"
 msgstr  ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 325
+# File: src/Erebot/Module/LagChecker.php, line: 322
 msgid   "No lag measure has been done yet"
 msgstr  ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 153
+# File: src/Erebot/Module/LagChecker.php, line: 152
 msgid   "Provides the <b><var name=\"trigger\"/></b> command which prints the "
         "current lag."
 msgstr  ""

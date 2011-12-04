@@ -2,7 +2,7 @@
 msgid   ""
 msgstr  "Project-Id-Version: Erebot_Module_LagChecker 0.5.0\n"
         "Report-Msgid-Bugs-To: i18n@erebot.net\n"
-        "POT-Creation-Date: 2011-09-10 08:26+0200\n"
+        "POT-Creation-Date: 2011-12-04 19:27+0100\n"
         "PO-Revision-Date: 2011-04-16 00:41+0200\n"
         "Last-Translator: Automatically generated\n"
         "Language-Team: none\n"
@@ -20,17 +20,18 @@ msgstr  "<b>Usage:</b> !<var name='trigger'/>. Display the latency of the "
         "connection, that is, the number of seconds it takes for a message "
         "from the bot to go to the IRC server and back."
 #
-#, php-format
-msgid   "Attempting reconnection to \"%s\""
-msgstr  "Attempting reconnection to \"%s\""
+# File: src/Erebot/Module/LagChecker.php, line: 278
+msgid   "Attempting reconnection to \"<var name=\"server\"/>\""
+msgstr  "Attempting reconnection to \"<var name=\"server\"/>\""
 #
 msgid   "Current lag: <var name=\"lag\"/> seconds"
 msgstr  "Current lag: <var name=\"lag\"/> seconds"
 #
-msgid   "Lag got too high for \"%(server)s\" ... reconnecting in %(delay)d "
-        "seconds"
-msgstr  "Lag got too high for \"%(server)s\" ... reconnecting in %(delay)d "
-        "seconds"
+# File: src/Erebot/Module/LagChecker.php, line: 233
+msgid   "Lag got too high for \"<var name=\"server\"/>\" ... reconnecting in "
+        "<var name=\"delay\"/>"
+msgstr  "Lag got too high for \"<var name=\"server\"/>\" ... reconnecting in "
+        "<var name=\"delay\"/>"
 #
 msgid   "No lag measure has been done yet"
 msgstr  "No lag measure has been done yet"
@@ -48,6 +49,26 @@ msgstr  "Unable to register trigger for Lag Checker"
 #
 #
 #
+#~ msgid        "Attempting reconnection to \"%s\""
+#~ msgstr       "Attempting reconnection to \"%s\""
+#
+#
+#
+#
+#
+#~ msgid        "Lag got too high for \"%(server)s\" ... reconnecting in "
+#~      "%(delay)d seconds"
+#~ msgstr       "Lag got too high for \"%(server)s\" ... reconnecting in "
+#~      "%(delay)d seconds"
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #~ msgid        "\n"
 #~      "<b>Usage:</b> !<var name='trigger'/>.\n"
 #~      "Display the latency of the connection, that is, the number of "
@@ -60,6 +81,10 @@ msgstr  "Unable to register trigger for Lag Checker"
 #~      "seconds\n"
 #~      "it takes for a message from the bot to go to the IRC server and "
 #~      "back.\n"
+#
+#
+#
+#
 #
 #
 #

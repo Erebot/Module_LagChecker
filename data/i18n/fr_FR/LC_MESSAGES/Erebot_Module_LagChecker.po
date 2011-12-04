@@ -10,17 +10,18 @@ msgstr  "Fournit la commande <b><var name=\"trigger\"/></b> qui affiche la "
 msgid   "No lag measure has been done yet"
 msgstr  "Aucune mesure du lag n'a été réalisée pour le moment"
 #
-msgid   "Lag got too high for \"%(server)s\" ... reconnecting in %(delay)d "
-        "seconds"
-msgstr  "La latence est trop élevée pour \"%(server)s\" ... reconnexion dans "
-        "%(delay)d secondes"
+# File: src/Erebot/Module/LagChecker.php, line: 233
+msgid   "Lag got too high for \"<var name=\"server\"/>\" ... reconnecting in "
+        "<var name=\"delay\"/>"
+msgstr  "La latence est trop élevée pour \"<var name=\"server\"/>\" ... "
+        "reconnexion dans <var name=\"delay\"/>"
 #
 msgid   "Current lag: <var name=\"lag\"/> seconds"
 msgstr  "Latence actuelle : <var name=\"lag\"/> secondes"
 #
-#, php-format
-msgid   "Attempting reconnection to \"%s\""
-msgstr  "Tentative de reconnexion à \"%s\""
+# File: src/Erebot/Module/LagChecker.php, line: 278
+msgid   "Attempting reconnection to \"<var name=\"server\"/>\""
+msgstr  "Tentative de reconnexion à \"<var name=\"server\"/>\""
 #
 # File: src/Erebot/Module/LagChecker.php, line: 167
 msgid   "<b>Usage:</b> !<var name='trigger'/>. Display the latency of the "
@@ -33,7 +34,7 @@ msgstr  "<b>Usage :</b> !<var name='trigger'/>. Affiche la latence de la "
 msgid   ""
 msgstr  "Project-Id-Version: Erebot_Module_LagChecker 0.5.0\n"
         "Report-Msgid-Bugs-To: i18n@erebot.net\n"
-        "POT-Creation-Date: 2011-09-10 08:25+0200\n"
+        "POT-Creation-Date: 2011-12-04 19:25+0100\n"
         "PO-Revision-Date: 2011-04-16 00:41+0200\n"
         "Last-Translator: Automatically generated\n"
         "Language-Team: none\n"
