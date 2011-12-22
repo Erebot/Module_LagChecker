@@ -19,19 +19,47 @@
 class   Erebot_Module_LagChecker
 extends Erebot_Module_Base
 {
+    /// Timer for lag checks.
     protected $_timerPing;
+
+    /// Timer defining the timeout for lag responses.
     protected $_timerPong;
+
+    /// Timer used to reconnect the bot after a disconnection due to latency.
     protected $_timerQuit;
 
+    /// Delay between lag checks.
     protected $_delayPing;
+
+    /// Timeout for lag responses.
     protected $_delayPong;
+
+    /// Delay before the bot reconnects after a disconnection due to latency.
     protected $_delayReco;
 
+    /// Timestamp of the last lag check sent.
     protected $_lastSent;
+
+    /// Timestamp of the last lag response received.
     protected $_lastRcvd;
 
+    /// Trigger registered by this module.
     protected $_trigger;
 
+    /**
+     * This method is called whenever the module is (re)loaded.
+     *
+     * \param int $flags
+     *      A bitwise OR of the Erebot_Module_Base::RELOAD_*
+     *      constants. Your method should take proper actions
+     *      depending on the value of those flags.
+     *
+     * \note
+     *      See the documentation on individual RELOAD_*
+     *      constants for a list of possible values.
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function _reload($flags)
     {
         if ($flags & self::RELOAD_MEMBERS) {
@@ -112,6 +140,11 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * \copydoc Erebot_Module_Base::_unload()
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function _unload()
     {
         $timers =   array('_timerPing', '_timerPong', '_timerQuit');
@@ -128,6 +161,18 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * Provides help about this module.
+     *
+     * \param Erebot_Interface_Event_Base_TextMessage $event
+     *      Some help request.
+     *
+     * \param array $words
+     *      Parameters passed with the request. This is the same
+     *      as this module's name when help is requested on the
+     *      module itself (in opposition with help on a specific
+     *      command provided by the module).
+     */
     public function getHelp(
         Erebot_Interface_Event_Base_TextMessage $event,
                                                 $words
@@ -143,7 +188,6 @@ extends Erebot_Module_Base
         $fmt        = $this->getFormatter($chan);
         $trigger    = $this->parseString('trigger', 'lag');
 
-        $bot        = $this->_connection->getBot();
         $moduleName = strtolower(get_class());
         $nbArgs     = count($words);
 
@@ -172,6 +216,14 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * Handles a request to check current lag.
+     *
+     * \param Erebot_Interface_Timer $timer
+     *      Timer that triggered this method.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function checkLag(Erebot_Interface_Timer $timer)
     {
         $this->_timerPong = new Erebot_Timer(
@@ -186,6 +238,18 @@ extends Erebot_Module_Base
         $this->sendCommand('PING '.$this->_lastSent);
     }
 
+    /**
+     * Handles the response to a lag check
+     * sent by the bot.
+     *
+     * \param Erebot_Interface_EventHandler $handler
+     *      Handler that triggered this event.
+     *
+     * \param Erebot_Interface_Event_Pong $event
+     *      Response to a lag check.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function handlePong(
         Erebot_Interface_EventHandler   $handler,
         Erebot_Interface_Event_Pong     $event
@@ -200,6 +264,17 @@ extends Erebot_Module_Base
         $this->_timerPong = NULL;
     }
 
+    /**
+     * Handles the bot exiting.
+     *
+     * \param Erebot_Interface_EventHandler $handler
+     *      Handler that triggered this event.
+     *
+     * \param Erebot_Interface_Event_Exit $event
+     *      Exit signal.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function handleExit(
         Erebot_Interface_EventHandler   $handler,
         Erebot_Interface_Event_Exit     $event
@@ -216,6 +291,16 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * Handles a request to disconnect the bot
+     * after a very high lag has been detected.
+     *
+     * \param Erebot_Interface_Timer $timer
+     *      Timer that triggered this method.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function disconnect(Erebot_Interface_Timer $timer)
     {
         $this->_connection->disconnect();
@@ -265,6 +350,17 @@ extends Erebot_Module_Base
         $this->_timerPong   = NULL;
     }
 
+    /**
+     * Handles a request to reconnect after
+     * a very high lag was detected and the
+     * bot was disconnected.
+     *
+     * \param Erebot_Interface_Timer $timer
+     *      Timer that triggered this method.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function reconnect(Erebot_Interface_Timer $timer)
     {
         $config     = $this->_connection->getConfig(NULL);
@@ -294,6 +390,14 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * Returns the current lag.
+     *
+     * \retval mixed
+     *      Either NULL if the lag has not been
+     *      computed yet or a floating point value
+     *      with the current lag.
+     */
     public function getLag()
     {
         if ($this->_lastRcvd === NULL)
@@ -301,6 +405,17 @@ extends Erebot_Module_Base
         return ($this->_lastRcvd - $this->_lastSent);
     }
 
+    /**
+     * Handles a request to get the current lag.
+     *
+     * \param Erebot_Interface_EventHandler $handler
+     *      Handler that triggered this event.
+     *
+     * \param Erebot_Interface_Event_Base_TextMessage $event
+     *      A request to get the current lag.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function handleGetLag(
         Erebot_Interface_EventHandler           $handler,
         Erebot_Interface_Event_Base_TextMessage $event
@@ -330,6 +445,21 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * Handles connections to an IRC server.
+     * This method is called after the logon phase,
+     * when the bot has already sent its credentials.
+     * It starts the lag detection process.
+     *
+     * \param Erebot_Interface_EventHandler $handler
+     *      Handler that triggered this event.
+     *
+     * \param Erebot_Interface_Event_Connect $event
+     *      Connection event.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function handleConnect(
         Erebot_Interface_EventHandler   $handler,
         Erebot_Interface_Event_Connect  $event
