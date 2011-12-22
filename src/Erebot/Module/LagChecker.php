@@ -16,6 +16,15 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \brief
+ *      This module provides a way for Erebot
+ *      to check latency.
+ *
+ * The bot will disconnect itself from an IRC server
+ * when the lag exceeds a given threshold.
+ * It will then reconnect to that server.
+ */
 class   Erebot_Module_LagChecker
 extends Erebot_Module_Base
 {
