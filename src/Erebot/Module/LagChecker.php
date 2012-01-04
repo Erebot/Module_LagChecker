@@ -23,7 +23,8 @@
  *
  * The bot will disconnect itself from an IRC server
  * when the lag exceeds a given threshold.
- * It will then reconnect to that server.
+ * It will then reconnect to that server after a certain
+ * delay.
  */
 class   Erebot_Module_LagChecker
 extends Erebot_Module_Base
@@ -325,11 +326,11 @@ extends Erebot_Module_Base
         $logger->info(
             $fmt->_(
                 'Lag got too high for "<var name="server"/>" ... '.
-                'reconnecting in <var name="delay"/>'
-            ),
-            array(
-                'server'    => $uri->getHost(),
-                'delay'     => new $cls($this->_delayReco),
+                'reconnecting in <var name="delay"/>',
+                array(
+                    'server'    => $uri->getHost(),
+                    'delay'     => new $cls($this->_delayReco),
+                )
             )
         );
 
@@ -380,8 +381,10 @@ extends Erebot_Module_Base
         $fmt        = $this->getFormatter(FALSE);
 
         $logger->info(
-            $fmt->_('Attempting reconnection to "<var name="server"/>"'),
-            array('server' => $uri->getHost())
+            $fmt->_(
+                'Attempting reconnection to "<var name="server"/>"',
+                array('server' => $uri->getHost())
+            )
         );
 
         try {
