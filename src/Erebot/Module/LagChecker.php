@@ -236,7 +236,8 @@ extends Erebot_Module_Base
      */
     public function checkLag(Erebot_Interface_Timer $timer)
     {
-        $this->_timerPong = new Erebot_Timer(
+        $timerCls = $this->getFactory('!Timer');
+        $this->_timerPong = new $timerCls(
             new Erebot_Callable(array($this, 'disconnect')),
             $this->_delayPong,
             FALSE
@@ -334,7 +335,8 @@ extends Erebot_Module_Base
             )
         );
 
-        $this->_timerQuit = new Erebot_Timer(
+        $timerCls = $this->getFactory('!Timer');
+        $this->_timerQuit = new $timerCls(
             new Erebot_Callable(array($this, 'reconnect')),
             $this->_delayReco,
             TRUE
@@ -477,7 +479,8 @@ extends Erebot_Module_Base
         Erebot_Interface_Event_Connect  $event
     )
     {
-        $this->_timerPing = new Erebot_Timer(
+        $timerCls = $this->getFactory('!Timer');
+        $this->_timerPing = new $timerCls(
             new Erebot_Callable(array($this, 'checkLag')),
             $this->_delayPing,
             TRUE
