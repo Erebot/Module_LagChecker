@@ -16,8 +16,15 @@ Contents:
     Configuration
     Usage
 
+Current status on http://travis-ci.org/:
+
+..  image:: https://secure.travis-ci.org/fpoirotte/Erebot_Module_LagChecker.png
+    :alt: unknown
+    :target: http://travis-ci.org/#!/fpoirotte/Erebot_Module_LagChecker/
+
 
 ..  _`Erebot`:
     https://www.erebot.net/
 
 .. vim: ts=4 et
+
