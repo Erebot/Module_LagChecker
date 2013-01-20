@@ -318,13 +318,12 @@ extends Erebot_Module_Base
     {
         $this->_connection->disconnect();
 
-        $config     = $this->_connection->getConfig(NULL);
-        $uris       = $config->getConnectionURI();
-        $uri        = new Erebot_URI($uris[count($uris) - 1]);
-        $logging    = Plop::getInstance();
-        $logger     = $logging->getLogger(__FILE__);
-        $fmt        = $this->getFormatter(FALSE);
-        $cls        = $this->getFactory('!Styling_Duration');
+        $config = $this->_connection->getConfig(NULL);
+        $uris   = $config->getConnectionURI();
+        $uri    = new Erebot_URI($uris[count($uris) - 1]);
+        $logger = Plop::getInstance();
+        $fmt    = $this->getFormatter(FALSE);
+        $cls    = $this->getFactory('!Styling_Duration');
 
         $logger->info(
             $fmt->_(
@@ -377,12 +376,11 @@ extends Erebot_Module_Base
      */
     public function reconnect(Erebot_Interface_Timer $timer)
     {
-        $config     = $this->_connection->getConfig(NULL);
-        $uris       = $config->getConnectionURI();
-        $uri        = new Erebot_URI($uris[count($uris) - 1]);
-        $logging    = Plop::getInstance();
-        $logger     = $logging->getLogger(__FILE__);
-        $fmt        = $this->getFormatter(FALSE);
+        $config = $this->_connection->getConfig(NULL);
+        $uris   = $config->getConnectionURI();
+        $uri    = new Erebot_URI($uris[count($uris) - 1]);
+        $logger = Plop::getInstance();
+        $fmt    = $this->getFormatter(FALSE);
 
         $logger->info(
             $fmt->_(
