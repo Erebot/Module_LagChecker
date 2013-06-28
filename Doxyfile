@@ -1,1 +1,1 @@
-@INCLUDE = buildenv/Doxyfile
+@INCLUDE = vendor/erebot/buildenv/Doxyfile

@@ -9,8 +9,7 @@
 
     <fileset dir="tests/" id="tests">
         <include name="**/*.php"/>
-        <exclude name="testenv/**/*.php"/>
     </fileset>
 
-    <import file="buildenv/build.xml"/>
+    <import file="vendor/erebot/buildenv/build.xml"/>
 </project>
