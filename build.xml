@@ -3,6 +3,10 @@
     <property name="qa.coverage.force" value="false"/>
     <property name="tagfiles" value="Erebot"/>
 
+    <fileset dir="." id="phar.files">
+        <exclude name="**"/>
+    </fileset>
+
     <fileset dir="src/" id="sources">
         <include name="**/*.php"/>
     </fileset>
