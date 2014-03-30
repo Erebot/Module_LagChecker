@@ -16,6 +16,8 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace Erebot\Module;
+
 /**
  * \brief
  *      This module provides a way for Erebot
@@ -26,41 +28,40 @@
  * It will then reconnect to that server after a certain
  * delay.
  */
-class   Erebot_Module_LagChecker
-extends Erebot_Module_Base
+class LagChecker extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpEnabled
 {
     /// Timer for lag checks.
-    protected $_timerPing;
+    protected $timerPing;
 
     /// Timer defining the timeout for lag responses.
-    protected $_timerPong;
+    protected $timerPong;
 
     /// Timer used to reconnect the bot after a disconnection due to latency.
-    protected $_timerQuit;
+    protected $timerQuit;
 
     /// Delay between lag checks.
-    protected $_delayPing;
+    protected $delayPing;
 
     /// Timeout for lag responses.
-    protected $_delayPong;
+    protected $delayPong;
 
     /// Delay before the bot reconnects after a disconnection due to latency.
-    protected $_delayReco;
+    protected $delayReco;
 
     /// Timestamp of the last lag check sent.
-    protected $_lastSent;
+    protected $lastSent;
 
     /// Timestamp of the last lag response received.
-    protected $_lastRcvd;
+    protected $lastRcvd;
 
     /// Trigger registered by this module.
-    protected $_trigger;
+    protected $trigger;
 
     /**
      * This method is called whenever the module is (re)loaded.
      *
      * \param int $flags
-     *      A bitwise OR of the Erebot_Module_Base::RELOAD_*
+     *      A bitwise OR of the Erebot::Module::Base::RELOAD_*
      *      constants. Your method should take proper actions
      *      depending on the value of those flags.
      *
@@ -70,65 +71,63 @@ extends Erebot_Module_Base
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function _reload($flags)
+    public function reload($flags)
     {
         if ($flags & self::RELOAD_MEMBERS) {
             if (!($flags & self::RELOAD_INIT)) {
-                $timers =   array('_timerPing', '_timerPong', '_timerQuit');
+                $timers =   array('timerPing', 'timerPong', 'timerQuit');
 
                 foreach ($timers as $timer) {
                     try {
                         $this->removeTimer($this->$timer);
-                    }
-                    catch (Erebot_ExceptionNotFound $e) {
+                    } catch (\Erebot\ExceptionNotFound $e) {
                     }
                     unset($this->$timer);
-                    $this->$timer = NULL;
+                    $this->$timer = null;
                 }
 
-                $this->_trigger = NULL;
+                $this->trigger = null;
             }
 
-            $this->_delayPing   = $this->parseInt('check');
-            $this->_delayPong   = $this->parseInt('timeout');
-            $this->_delayReco   = $this->parseInt('reconnect');
+            $this->delayPing    = $this->parseInt('check');
+            $this->delayPong    = $this->parseInt('timeout');
+            $this->delayReco    = $this->parseInt('reconnect');
 
-            $this->_timerPing   = NULL;
-            $this->_timerPong   = NULL;
-            $this->_timerQuit   = NULL;
+            $this->timerPing    = null;
+            $this->timerPong    = null;
+            $this->timerQuit    = null;
 
-            $this->_lastRcvd    = NULL;
-            $this->_lastSent    = NULL;
+            $this->lastRcvd     = null;
+            $this->lastSent     = null;
         }
 
         if ($flags & self::RELOAD_HANDLERS) {
             $handlers = array(
-                'handlePong'        => 'Erebot_Interface_Event_Pong',
-                'handleExit'        => 'Erebot_Interface_Event_Exit',
-                'handleConnect'     => 'Erebot_Interface_Event_Connect',
+                'handlePong'        => '\\Erebot\\Interfaces\\Event\\Pong',
+                'handleExit'        => '\\Erebot\\Interfaces\\Event\\ExitEvent',
+                'handleConnect'     => '\\Erebot\\Interfaces\\Event\\Connect',
             );
 
             foreach ($handlers as $callback => $eventType) {
-                $handler = new Erebot_EventHandler(
-                    new Erebot_Callable(array($this, $callback)),
-                    new Erebot_Event_Match_InstanceOf($eventType)
+                $handler = new \Erebot\EventHandler(
+                    \Erebot\CallableWrapper::wrap(array($this, $callback)),
+                    new \Erebot\Event\Match\Type($eventType)
                 );
-                $this->_connection->addEventHandler($handler);
+                $this->connection->addEventHandler($handler);
             }
 
-            $registry   =   $this->_connection->getModule(
-                'Erebot_Module_TriggerRegistry'
+            $registry   =   $this->connection->getModule(
+                '\\Erebot\\Module\\TriggerRegistry'
             );
 
             $trigger    = $this->parseString('trigger', 'lag');
-            $matchAny   = Erebot_Utils::getVStatic($registry, 'MATCH_ANY');
 
-            $this->_trigger = $registry->registerTriggers(
+            $this->trigger = $registry->registerTriggers(
                 $trigger,
-                $matchAny
+                $registry::MATCH_ANY
             );
-            if ($this->_trigger === NULL) {
-                $fmt = $this->getFormatter(FALSE);
+            if ($this->trigger === null) {
+                $fmt = $this->getFormatter(false);
                 throw new Exception(
                     $fmt->_(
                         'Unable to register trigger for Lag Checker'
@@ -136,66 +135,60 @@ extends Erebot_Module_Base
                 );
             }
 
-            $handler = new Erebot_EventHandler(
-                new Erebot_Callable(array($this, 'handleGetLag')),
-                new Erebot_Event_Match_All(
-                    new Erebot_Event_Match_InstanceOf(
-                        'Erebot_Interface_Event_Base_TextMessage'
+            $handler = new \Erebot\EventHandler(
+                \Erebot\CallableWrapper::wrap(array($this, 'handleGetLag')),
+                new \Erebot\Event\Match\All(
+                    new \Erebot\Event\Match\Type(
+                        '\\Erebot\\Interfaces\\Event\\Base\\TextMessage'
                     ),
-                    new Erebot_Event_Match_TextStatic($trigger, TRUE)
+                    new \Erebot\Event\Match\TextStatic($trigger, true)
                 )
             );
-            $this->_connection->addEventHandler($handler);
-
-            $cls = $this->getFactory('!Callable');
-            $this->registerHelpMethod(new $cls(array($this, 'getHelp')));
+            $this->connection->addEventHandler($handler);
         }
     }
 
     /**
-     * \copydoc Erebot_Module_Base::_unload()
+     * \copydoc Erebot::Module::Base::unload()
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function _unload()
+    public function unload()
     {
-        $timers =   array('_timerPing', '_timerPong', '_timerQuit');
-
-        foreach ($timers as $timer) {
+        foreach (array('timerPing', 'timerPong', 'timerQuit') as $timer) {
             try {
-                if (isset($this->$timer))
+                if (isset($this->$timer)) {
                     $this->removeTimer($this->$timer);
-            }
-            catch (Erebot_ExceptionNotFound $e) {
+                }
+            } catch (\Erebot\ExceptionNotFound $e) {
             }
             unset($this->$timer);
-            $this->$timer = NULL;
+            $this->$timer = null;
         }
     }
 
     /**
      * Provides help about this module.
      *
-     * \param Erebot_Interface_Event_Base_TextMessage $event
+     * \param Erebot::Interfaces::Event::Base::TextMessage $event
      *      Some help request.
      *
-     * \param Erebot_Interface_TextWrapper $words
+     * \param Erebot::Interfaces::TextWrapper $words
      *      Parameters passed with the request. This is the same
      *      as this module's name when help is requested on the
      *      module itself (in opposition with help on a specific
      *      command provided by the module).
      */
     public function getHelp(
-        Erebot_Interface_Event_Base_TextMessage $event,
-        Erebot_Interface_TextWrapper            $words
-    )
-    {
-        if ($event instanceof Erebot_Interface_Event_Base_Private) {
+        \Erebot\Interfaces\Event\Base\TextMessage   $event,
+        \Erebot\Interfaces\TextWrapper              $words
+    ) {
+        if ($event instanceof \Erebot\Interfaces\Event\Base\PrivateMessage) {
             $target = $event->getSource();
-            $chan   = NULL;
-        }
-        else
+            $chan   = null;
+        } else {
             $target = $chan = $event->getChan();
+        }
 
         $fmt        = $this->getFormatter($chan);
         $trigger    = $this->parseString('trigger', 'lag');
@@ -210,11 +203,12 @@ extends Erebot_Module_Base
                 array('trigger' => $trigger)
             );
             $this->sendMessage($target, $msg);
-            return TRUE;
+            return true;
         }
 
-        if ($nbArgs < 2)
-            return FALSE;
+        if ($nbArgs < 2) {
+            return false;
+        }
 
         if ($words[1] == $trigger) {
             $msg = $fmt->_(
@@ -224,83 +218,82 @@ extends Erebot_Module_Base
                 array('trigger' => $trigger)
             );
             $this->sendMessage($target, $msg);
-            return TRUE;
+            return true;
         }
     }
 
     /**
      * Handles a request to check current lag.
      *
-     * \param Erebot_Interface_Timer $timer
+     * \param Erebot::TimerInterface $timer
      *      Timer that triggered this method.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function checkLag(Erebot_Interface_Timer $timer)
+    public function checkLag(\Erebot\TimerInterface $timer)
     {
         $timerCls = $this->getFactory('!Timer');
-        $this->_timerPong = new $timerCls(
-            new Erebot_Callable(array($this, 'disconnect')),
-            $this->_delayPong,
-            FALSE
+        $this->timerPong = new $timerCls(
+            \Erebot\CallableWrapper::wrap(array($this, 'disconnect')),
+            $this->delayPong,
+            false
         );
-        $this->addTimer($this->_timerPong);
+        $this->addTimer($this->timerPong);
 
-        $this->_lastSent    = microtime(TRUE);
-        $this->_lastRcvd    = NULL;
-        $this->sendCommand('PING '.$this->_lastSent);
+        $this->lastSent = microtime(true);
+        $this->lastRcvd = null;
+        $this->sendCommand('PING '.$this->lastSent);
     }
 
     /**
      * Handles the response to a lag check
      * sent by the bot.
      *
-     * \param Erebot_Interface_EventHandler $handler
+     * \param Erebot::Interfaces::EventHandler $handler
      *      Handler that triggered this event.
      *
-     * \param Erebot_Interface_Event_Pong $event
+     * \param Erebot::Interfaces::Event::Pong $event
      *      Response to a lag check.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handlePong(
-        Erebot_Interface_EventHandler   $handler,
-        Erebot_Interface_Event_Pong     $event
-    )
-    {
-        if ($event->getText() != ((string) $this->_lastSent))
+        \Erebot\Interfaces\EventHandler $handler,
+        \Erebot\Interfaces\Event\Pong   $event
+    ) {
+        if ($event->getText() != ((string) $this->lastSent)) {
             return;
+        }
 
-        $this->_lastRcvd = microtime(TRUE);
-        $this->removeTimer($this->_timerPong);
-        unset($this->_timerPong);
-        $this->_timerPong = NULL;
+        $this->lastRcvd = microtime(true);
+        $this->removeTimer($this->timerPong);
+        unset($this->timerPong);
+        $this->timerPong = null;
     }
 
     /**
      * Handles the bot exiting.
      *
-     * \param Erebot_Interface_EventHandler $handler
+     * \param Erebot::Interfaces::EventHandler $handler
      *      Handler that triggered this event.
      *
-     * \param Erebot_Interface_Event_Exit $event
+     * \param Erebot::Interfaces::Event::ExitEvent $event
      *      Exit signal.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handleExit(
-        Erebot_Interface_EventHandler   $handler,
-        Erebot_Interface_Event_Exit     $event
-    )
-    {
-        if ($this->_timerPing) {
-            $this->removeTimer($this->_timerPing);
-            unset($this->_timerPing);
+        \Erebot\Interfaces\EventHandler     $handler,
+        \Erebot\Interfaces\Event\ExitEvent  $event
+    ) {
+        if ($this->timerPing) {
+            $this->removeTimer($this->timerPing);
+            unset($this->timerPing);
         }
 
-        if ($this->_timerPong) {
-            $this->removeTimer($this->_timerPong);
-            unset($this->_timerPong);
+        if ($this->timerPong) {
+            $this->removeTimer($this->timerPong);
+            unset($this->timerPong);
         }
     }
 
@@ -308,22 +301,22 @@ extends Erebot_Module_Base
      * Handles a request to disconnect the bot
      * after a very high lag has been detected.
      *
-     * \param Erebot_Interface_Timer $timer
+     * \param Erebot::TimerInterface $timer
      *      Timer that triggered this method.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function disconnect(Erebot_Interface_Timer $timer)
+    public function disconnect(\Erebot\TimerInterface $timer)
     {
-        $this->_connection->disconnect();
+        $this->connection->disconnect();
 
-        $config = $this->_connection->getConfig(NULL);
+        $config = $this->connection->getConfig(null);
         $uris   = $config->getConnectionURI();
-        $uri    = new Erebot_URI($uris[count($uris) - 1]);
+        $uri    = new \Erebot\URI($uris[count($uris) - 1]);
         $logger = Plop::getInstance();
-        $fmt    = $this->getFormatter(FALSE);
-        $cls    = $this->getFactory('!Styling_Duration');
+        $fmt    = $this->getFormatter(false);
+        $cls    = $this->getFactory('!Styling\\Variables\\Duration');
 
         $logger->info(
             $fmt->_(
@@ -331,36 +324,36 @@ extends Erebot_Module_Base
                 'reconnecting in <var name="delay"/>',
                 array(
                     'server'    => $uri->getHost(),
-                    'delay'     => new $cls($this->_delayReco),
+                    'delay'     => new $cls($this->delayReco),
                 )
             )
         );
 
         $timerCls = $this->getFactory('!Timer');
-        $this->_timerQuit = new $timerCls(
-            new Erebot_Callable(array($this, 'reconnect')),
-            $this->_delayReco,
-            TRUE
+        $this->timerQuit = new $timerCls(
+            \Erebot\CallableWrapper::wrap(array($this, 'reconnect')),
+            $this->delayReco,
+            true
         );
-        $this->addTimer($this->_timerQuit);
+        $this->addTimer($this->timerQuit);
 
         try {
-            if ($this->_timerPing !== NULL)
-                $this->removeTimer($this->_timerPing);
-        }
-        catch (Erebot_Exception $e) {
+            if ($this->timerPing !== null) {
+                $this->removeTimer($this->timerPing);
+            }
+        } catch (\Erebot\Exception $e) {
         }
 
         try {
-            if ($this->_timerPong !== NULL)
-                $this->removeTimer($this->_timerPong);
-        }
-        catch (Erebot_Exception $e) {
+            if ($this->timerPong !== null) {
+                $this->removeTimer($this->timerPong);
+            }
+        } catch (\Erebot\Exception $e) {
         }
 
-        unset($this->_timerPing, $this->_timerPong);
-        $this->_timerPing   = NULL;
-        $this->_timerPong   = NULL;
+        unset($this->timerPing, $this->timerPong);
+        $this->timerPing    = null;
+        $this->timerPong    = null;
     }
 
     /**
@@ -368,19 +361,19 @@ extends Erebot_Module_Base
      * a very high lag was detected and the
      * bot was disconnected.
      *
-     * \param Erebot_Interface_Timer $timer
+     * \param Erebot::TimerInterface $timer
      *      Timer that triggered this method.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function reconnect(Erebot_Interface_Timer $timer)
+    public function reconnect(\Erebot\TimerInterface $timer)
     {
-        $config = $this->_connection->getConfig(NULL);
+        $config = $this->connection->getConfig(null);
         $uris   = $config->getConnectionURI();
-        $uri    = new Erebot_URI($uris[count($uris) - 1]);
+        $uri    = new \Erebot\URI($uris[count($uris) - 1]);
         $logger = Plop::getInstance();
-        $fmt    = $this->getFormatter(FALSE);
+        $fmt    = $this->getFormatter(false);
 
         $logger->info(
             $fmt->_(
@@ -390,17 +383,16 @@ extends Erebot_Module_Base
         );
 
         try {
-            $this->_connection->connect();
-            $bot = $this->_connection->getBot();
-            $bot->addConnection($this->_connection);
+            $this->connection->connect();
+            $bot = $this->connection->getBot();
+            $bot->addConnection($this->connection);
 
-            if ($this->_timerQuit !== NULL) {
-                $this->removeTimer($this->_timerQuit);
-                unset($this->_timerQuit);
-                $this->_timerQuit = NULL;
+            if ($this->timerQuit !== null) {
+                $this->removeTimer($this->timerQuit);
+                unset($this->timerQuit);
+                $this->timerQuit = null;
             }
-        }
-        catch (Erebot_ExceptionConnectionFailure $e) {
+        } catch (\Erebot\ConnectionFailureException $e) {
         }
     }
 
@@ -408,49 +400,49 @@ extends Erebot_Module_Base
      * Returns the current lag.
      *
      * \retval mixed
-     *      Either NULL if the lag has not been
+     *      Either \b null if the lag has not been
      *      computed yet or a floating point value
      *      with the current lag.
      */
     public function getLag()
     {
-        if ($this->_lastRcvd === NULL)
-            return NULL;
-        return ($this->_lastRcvd - $this->_lastSent);
+        if ($this->lastRcvd === null) {
+            return null;
+        }
+        return ($this->lastRcvd - $this->lastSent);
     }
 
     /**
      * Handles a request to get the current lag.
      *
-     * \param Erebot_Interface_EventHandler $handler
+     * \param Erebot::Interfaces::EventHandler $handler
      *      Handler that triggered this event.
      *
-     * \param Erebot_Interface_Event_Base_TextMessage $event
+     * \param Erebot::Interfaces::Event::Base::TextMessage $event
      *      A request to get the current lag.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handleGetLag(
-        Erebot_Interface_EventHandler           $handler,
-        Erebot_Interface_Event_Base_TextMessage $event
-    )
-    {
-        if ($event instanceof Erebot_Interface_Event_Base_Private) {
+        \Erebot\Interfaces\EventHandler             $handler,
+        \Erebot\Interfaces\Event\Base\TextMessage   $event
+    ) {
+        if ($event instanceof \Erebot\Interfaces\Event\Base\PrivateMessage) {
             $target = $event->getSource();
-            $chan   = NULL;
-        }
-        else
+            $chan   = null;
+        } else {
             $target = $chan = $event->getChan();
+        }
 
         $lag    = $this->getLag();
         $fmt    = $this->getFormatter($chan);
 
-        if ($lag === NULL)
+        if ($lag === null) {
             $this->sendMessage(
                 $target,
                 $fmt->_('No lag measure has been done yet')
             );
-        else {
+        } else {
             $msg = $fmt->_(
                 'Current lag: <var name="lag"/> seconds',
                 array('lag' => $lag)
@@ -465,38 +457,35 @@ extends Erebot_Module_Base
      * when the bot has already sent its credentials.
      * It starts the lag detection process.
      *
-     * \param Erebot_Interface_EventHandler $handler
+     * \param Erebot::Interfaces::EventHandler $handler
      *      Handler that triggered this event.
      *
-     * \param Erebot_Interface_Event_Connect $event
+     * \param Erebot::Interfaces::Event::Connect $event
      *      Connection event.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function handleConnect(
-        Erebot_Interface_EventHandler   $handler,
-        Erebot_Interface_Event_Connect  $event
-    )
-    {
+        \Erebot\Interfaces\EventHandler   $handler,
+        \Erebot\Interfaces\Event\Connect  $event
+    ) {
         $timerCls = $this->getFactory('!Timer');
-        $this->_timerPing = new $timerCls(
-            new Erebot_Callable(array($this, 'checkLag')),
-            $this->_delayPing,
-            TRUE
+        $this->timerPing = new $timerCls(
+            \Erebot\CallableWrapper::wrap(array($this, 'checkLag')),
+            $this->delayPing,
+            true
         );
-        $this->addTimer($this->_timerPing);
+        $this->addTimer($this->timerPing);
 
-        if ($this->_trigger !== NULL) {
+        if ($this->trigger !== null) {
             try {
-                $registry = $this->_connection->getModule(
-                    'Erebot_Module_TriggerRegistry'
+                $registry = $this->connection->getModule(
+                    '\\Erebot\\Module\\TriggerRegistry'
                 );
-                $registry->freeTriggers($this->_trigger);
-            }
-            catch (Erebot_Exception $e) {
+                $registry->freeTriggers($this->trigger);
+            } catch (\Erebot\Exception $e) {
             }
         }
     }
 }
-

@@ -17,16 +17,16 @@
 */
 
 class   Erebot_Module_LagCheckerTestHelper
-extends Erebot_Module_LagChecker
+extends \Erebot\Module\LagChecker
 {
     public function setLastSent($sent)
     {
-        $this->_lastSent = $sent;
+        $this->lastSent = $sent;
     }
 
     public function setLastReceived($rcvd)
     {
-        $this->_lastRcvd = $rcvd;
+        $this->lastRcvd = $rcvd;
     }
 }
 
@@ -36,7 +36,7 @@ extends Erebot_Testenv_Module_TestCase
     protected function _mockPrivateText()
     {
         $event = $this->getMock(
-            'Erebot_Interface_Event_PrivateText',
+            '\\Erebot\\Interfaces\\Event\\PrivateText',
             array(), array(), '', FALSE, FALSE
         );
 
@@ -57,17 +57,17 @@ extends Erebot_Testenv_Module_TestCase
 
     public function setUp()
     {
-        $this->_now = microtime(TRUE);
+        $this->_now = time();
         $this->_module = new Erebot_Module_LagCheckerTestHelper(NULL);
         parent::setUp();
 
         // Would otherwise fail due to timers being used.
-        $this->_module->reload($this->_connection, 0);
+        $this->_module->reloadModule($this->_connection, 0);
     }
 
     public function tearDown()
     {
-        $this->_module->unload();
+        $this->_module->unloadModule();
         parent::tearDown();
     }
 
@@ -85,16 +85,14 @@ extends Erebot_Testenv_Module_TestCase
 
         // Clear output buffer.
         $this->_outputBuffer = array();
-        // Sounds stupid, right ? But still necessary...
-        $lag = (string) ($this->_now + 3.14 - $this->_now);
         $this->_module->setLastSent($this->_now);
-        $this->_module->setLastReceived($this->_now + 3.14);
+        $this->_module->setLastReceived($this->_now + 42);
 
         $event = $this->_mockPrivateText();
         $this->_module->handleGetLag($this->_eventHandler, $event);
         $this->assertSame(1, count($this->_outputBuffer));
         $this->assertSame(
-            'PRIVMSG foo :Current lag: <var value="'.$lag.'"/> seconds',
+            'PRIVMSG foo :Current lag: '.($this->_now + 42 - $this->_now).' seconds',
             $this->_outputBuffer[0]
         );
     }
