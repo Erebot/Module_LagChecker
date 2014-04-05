@@ -577,12 +577,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/DOM.git",
-                "reference": "4432a5b15e5da9577dfda60cf3eb9178b484d9c2"
+                "reference": "25ecd53dab28ce39903065284d9d85487508208c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/DOM/zipball/4432a5b15e5da9577dfda60cf3eb9178b484d9c2",
-                "reference": "4432a5b15e5da9577dfda60cf3eb9178b484d9c2",
+                "url": "https://api.github.com/repos/Erebot/DOM/zipball/25ecd53dab28ce39903065284d9d85487508208c",
+                "reference": "25ecd53dab28ce39903065284d9d85487508208c",
                 "shasum": ""
             },
             "require": {
@@ -624,7 +624,7 @@
                 "schematron",
                 "validation"
             ],
-            "time": "2014-04-03 23:14:33"
+            "time": "2014-04-05 12:50:53"
         },
         {
             "name": "erebot/styling",
