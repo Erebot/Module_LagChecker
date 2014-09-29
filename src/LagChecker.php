@@ -314,7 +314,7 @@ class LagChecker extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpE
         $config = $this->connection->getConfig(null);
         $uris   = $config->getConnectionURI();
         $uri    = new \Erebot\URI($uris[count($uris) - 1]);
-        $logger = \Plop::getInstance();
+        $logger = \Plop\Plop::getInstance();
         $fmt    = $this->getFormatter(false);
         $cls    = $this->getFactory('!Styling\\Variables\\Duration');
 
@@ -372,7 +372,7 @@ class LagChecker extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpE
         $config = $this->connection->getConfig(null);
         $uris   = $config->getConnectionURI();
         $uri    = new \Erebot\URI($uris[count($uris) - 1]);
-        $logger = \Plop::getInstance();
+        $logger = \Plop\Plop::getInstance();
         $fmt    = $this->getFormatter(false);
 
         $logger->info(
