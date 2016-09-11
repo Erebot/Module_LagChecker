@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "63feaa21f554863feac29bfb2dc6f767",
-    "content-hash": "2728ce29228c5bfe09fc14af2b5a102f",
+    "hash": "e0873d7d8b8ce85ddc4e25787cb36a3e",
+    "content-hash": "77d3906e17db7ff8f5d95a7a5d05be02",
     "packages": [
         {
             "name": "erebot/api",
-            "version": "0.7.0",
+            "version": "0.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/API.git",
-                "reference": "21be3a6251810a04d5effb2f4dd0b360515b6012"
+                "reference": "1f905d7742874c511f1445504cbff72c3c442863"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/API/zipball/21be3a6251810a04d5effb2f4dd0b360515b6012",
-                "reference": "21be3a6251810a04d5effb2f4dd0b360515b6012",
+                "url": "https://api.github.com/repos/Erebot/API/zipball/1f905d7742874c511f1445504cbff72c3c442863",
+                "reference": "1f905d7742874c511f1445504cbff72c3c442863",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,7 @@
                 "bot",
                 "irc"
             ],
-            "time": "2016-09-11 10:56:24"
+            "time": "2016-09-11 21:18:57"
         },
         {
             "name": "erebot/callable-wrapper",
