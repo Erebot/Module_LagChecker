@@ -35,10 +35,7 @@ extends Erebot_Testenv_Module_TestCase
 {
     protected function _mockPrivateText()
     {
-        $event = $this->getMock(
-            '\\Erebot\\Interfaces\\Event\\PrivateText',
-            array(), array(), '', FALSE, FALSE
-        );
+        $event = $this->getMockBuilder('\\Erebot\\Interfaces\\Event\\PrivateText')->getMock();
 
         $event
             ->expects($this->any())
