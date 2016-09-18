@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e0873d7d8b8ce85ddc4e25787cb36a3e",
-    "content-hash": "77d3906e17db7ff8f5d95a7a5d05be02",
+    "hash": "32be171ca60ef1441a7ffe8d8b03d619",
+    "content-hash": "965787d97b839513065639b55ffcbc1d",
     "packages": [
         {
             "name": "erebot/api",
@@ -227,20 +227,20 @@
         },
         {
             "name": "erebot/triggerregistry-module",
-            "version": "dev-master",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Module_TriggerRegistry.git",
-                "reference": "c71c811e70dde2a5c1bbf995740d8bbec8ffebdd"
+                "reference": "a60270118457a7c9a3acc58429629417260fa83f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Module_TriggerRegistry/zipball/c71c811e70dde2a5c1bbf995740d8bbec8ffebdd",
-                "reference": "c71c811e70dde2a5c1bbf995740d8bbec8ffebdd",
+                "url": "https://api.github.com/repos/Erebot/Module_TriggerRegistry/zipball/a60270118457a7c9a3acc58429629417260fa83f",
+                "reference": "a60270118457a7c9a3acc58429629417260fa83f",
                 "shasum": ""
             },
             "require": {
-                "erebot/api": "*",
+                "erebot/api": "^0.7.1",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -278,7 +278,7 @@
                 "irc",
                 "module"
             ],
-            "time": "2016-09-11 21:00:41"
+            "time": "2016-09-11 21:23:30"
         },
         {
             "name": "erebot/uri",
@@ -746,16 +746,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.5.2",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "da8529775f14f4fdae33f916eb0cf65f6afbddbc"
+                "reference": "ea74994a3dc7f8d2f65a06009348f2d63c81e61f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/da8529775f14f4fdae33f916eb0cf65f6afbddbc",
-                "reference": "da8529775f14f4fdae33f916eb0cf65f6afbddbc",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/ea74994a3dc7f8d2f65a06009348f2d63c81e61f",
+                "reference": "ea74994a3dc7f8d2f65a06009348f2d63c81e61f",
                 "shasum": ""
             },
             "require": {
@@ -784,7 +784,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2016-09-06 16:07:05"
+            "time": "2016-09-16 13:37:59"
         },
         {
             "name": "pdepend/pdepend",
@@ -828,16 +828,16 @@
         },
         {
             "name": "phing/phing",
-            "version": "2.14.0",
+            "version": "2.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "7dd73c83c377623def54b58121f46b4dcb35dd61"
+                "reference": "bbfcaee391123220fc54e9c6feffeeea3c8775b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/7dd73c83c377623def54b58121f46b4dcb35dd61",
-                "reference": "7dd73c83c377623def54b58121f46b4dcb35dd61",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/bbfcaee391123220fc54e9c6feffeeea3c8775b7",
+                "reference": "bbfcaee391123220fc54e9c6feffeeea3c8775b7",
                 "shasum": ""
             },
             "require": {
@@ -860,6 +860,7 @@
                 "phpunit/phpunit": ">=3.7",
                 "sebastian/git": "~1.0",
                 "sebastian/phpcpd": "2.x",
+                "siad007/versioncontrol_hg": "^1.0",
                 "squizlabs/php_codesniffer": "~2.2",
                 "symfony/yaml": "~2.7"
             },
@@ -874,6 +875,7 @@
                 "phpunit/php-code-coverage": "Library that provides collection, processing, and rendering functionality for PHP code coverage information",
                 "phpunit/phpunit": "The PHP Unit Testing Framework",
                 "sebastian/phpcpd": "Copy/Paste Detector (CPD) for PHP code",
+                "siad007/versioncontrol_hg": "A library for interfacing with Mercurial repositories.",
                 "tedivm/jshrink": "Javascript Minifier built in PHP"
             },
             "bin": [
@@ -882,7 +884,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.14.x-dev"
+                    "dev-master": "2.15.x-dev"
                 }
             },
             "autoload": {
@@ -915,7 +917,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2016-03-10 21:39:23"
+            "time": "2016-09-14 19:38:14"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2724,9 +2726,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "erebot/triggerregistry-module": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
