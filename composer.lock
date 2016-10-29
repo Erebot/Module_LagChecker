@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "erebot/api",
-            "version": "0.7.1",
+            "version": "0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/API.git",
-                "reference": "1f905d7742874c511f1445504cbff72c3c442863"
+                "reference": "289ee6658b90d6d507d6dabe0119f28f773e05af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/API/zipball/1f905d7742874c511f1445504cbff72c3c442863",
-                "reference": "1f905d7742874c511f1445504cbff72c3c442863",
+                "url": "https://api.github.com/repos/Erebot/API/zipball/289ee6658b90d6d507d6dabe0119f28f773e05af",
+                "reference": "289ee6658b90d6d507d6dabe0119f28f773e05af",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,7 @@
                 "bot",
                 "irc"
             ],
-            "time": "2016-09-11 21:18:57"
+            "time": "2016-10-29 17:27:28"
         },
         {
             "name": "erebot/callable-wrapper",
