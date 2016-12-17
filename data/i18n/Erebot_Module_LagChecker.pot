@@ -5,9 +5,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Erebot_Module_LagChecker dev-master\n"
+"Project-Id-Version: Erebot_Module_LagChecker 1.0.x-dev\n"
 "Report-Msgid-Bugs-To: i18n@erebot.net\n"
-"POT-Creation-Date: 2013-08-15 14:41+0200\n"
+"POT-Creation-Date: 2016-12-17 22:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,37 +16,37 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 #
-# File: src/Erebot/Module/LagChecker.php, line: 221
+# File: src/LagChecker.php, line: 215
 msgid ""
 "<b>Usage:</b> !<var name='trigger'/>. Display the latency of the connection, "
 "that is, the number of seconds it takes for a message from the bot to go to "
 "the IRC server and back."
 msgstr ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 387
+# File: src/LagChecker.php, line: 380
 msgid "Attempting reconnection to \"<var name=\"server\"/>\""
 msgstr ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 455
+# File: src/LagChecker.php, line: 447
 msgid "Current lag: <var name=\"lag\"/> seconds"
 msgstr ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 330
+# File: src/LagChecker.php, line: 323
 msgid ""
 "Lag got too high for \"<var name=\"server\"/>\" ... reconnecting in <var name="
 "\"delay\"/>"
 msgstr ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 451
+# File: src/LagChecker.php, line: 443
 msgid "No lag measure has been done yet"
 msgstr ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 208
+# File: src/LagChecker.php, line: 201
 msgid ""
 "Provides the <b><var name=\"trigger\"/></b> command which prints the current "
 "lag."
 msgstr ""
 #
-# File: src/Erebot/Module/LagChecker.php, line: 134
+# File: src/LagChecker.php, line: 133
 msgid "Unable to register trigger for Lag Checker"
 msgstr ""
