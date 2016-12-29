@@ -1,0 +1,118 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016, Erebot
+# This file is distributed under the same license as the Erebot_Module_LagChecker package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Erebot_Module_LagChecker 1.0.x-dev\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-29 23:18+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/Configuration.rst:10
+msgid "Configuration"
+msgstr ""
+
+#: ../src/Configuration.rst:15
+msgid "Options"
+msgstr ""
+
+#: ../src/Configuration.rst:17
+msgid "This module provides several configuration options."
+msgstr ""
+
+#: ../src/Configuration.rst:0
+msgid "Options for |project|"
+msgstr ""
+
+#: ../src/Configuration.rst:22
+msgid "Name"
+msgstr ""
+
+#: ../src/Configuration.rst:22
+msgid "Type"
+msgstr ""
+
+#: ../src/Configuration.rst:22
+msgid "Default value"
+msgstr ""
+
+#: ../src/Configuration.rst:22
+msgid "Description"
+msgstr ""
+
+#: ../src/Configuration.rst:25
+msgid "check"
+msgstr ""
+
+#: ../src/Configuration.rst:25
+#: ../src/Configuration.rst:37
+#: ../src/Configuration.rst:49
+msgid "integer"
+msgstr ""
+
+#: ../src/Configuration.rst:25
+#: ../src/Configuration.rst:37
+#: ../src/Configuration.rst:49
+msgid "n/a"
+msgstr ""
+
+#: ../src/Configuration.rst:25
+msgid "The delay (in seconds) between two consecutive lag checks. This should not be set to high to avoir risking a disconnection due to a timeout between checks (thus defeating the whole point of this module). However, it should not be set too low either to avoid flooding the IRC server with lag checks. A delay of 60 seconds (1 minute) seems reasonable."
+msgstr ""
+
+#: ../src/Configuration.rst:37
+msgid "reconnect"
+msgstr ""
+
+#: ../src/Configuration.rst:37
+msgid "The delay the bot will wait after disconnecting from an IRC server due to high latency before an attempt is made to reconnect. This is meant to delay operations a little so that the latency gets lower and to implement some kind of \"reconnection throttling\". You should probably set this to a value higher or equal to the value for the ``check`` option."
+msgstr ""
+
+#: ../src/Configuration.rst:49
+msgid "timeout"
+msgstr ""
+
+#: ../src/Configuration.rst:49
+msgid "The number of seconds the bot will wait for a response after it sends a periodic latency check. If no response is received by then, this module will consider the connection to be unresponsive and will (possibly forcefully) disconnect the bot from the associated IRC server. You may set this to a low value on broadband connections (eg. 5 seconds)."
+msgstr ""
+
+#: ../src/Configuration.rst:62
+msgid "trigger"
+msgstr ""
+
+#: ../src/Configuration.rst:62
+msgid "string"
+msgstr ""
+
+#: ../src/Configuration.rst:62
+msgid "\"lag\""
+msgstr ""
+
+#: ../src/Configuration.rst:62
+msgid "The command to use to ask the bot about the current lag."
+msgstr ""
+
+#: ../src/Configuration.rst:67
+msgid "Depending on your connection, setting the value of the ``timeout`` option to a value that is too low may result in excessive cycles of disconnections and reconnections from/to IRC servers."
+msgstr ""
+
+#: ../src/Configuration.rst:72
+msgid "The trigger should only contain alphanumeric characters (in particular, do not add any prefix, like \"!\" to that value)."
+msgstr ""
+
+#: ../src/Configuration.rst:76
+msgid "Example"
+msgstr ""
+
+#: ../src/Configuration.rst:78
+msgid "In this example, we configure the bot to check the latency every 2 minutes (120 seconds). The IRC server has 15 seconds to respond to our latency checks. If it does not answer by then, the bot will disconnect from that IRC server and will wait for another full minute before attempting a reconnection. Moreover, the command \"!latency\" can be used at any time to display the current latency."
+msgstr ""
+

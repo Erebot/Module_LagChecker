@@ -1,0 +1,116 @@
+# French translations for Erebot_Module_LagChecker package.
+# Copyright (C) 2011-2016, Erebot
+# This file is distributed under the same license as the Erebot_Module_LagChecker package.
+# Automatically generated, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Erebot_Module_LagChecker 1.0.x-dev\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-29 23:18+0100\n"
+"PO-Revision-Date: 2016-12-29 23:18+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#
+msgid "Configuration"
+msgstr ""
+#
+msgid "Options"
+msgstr ""
+#
+msgid "This module provides several configuration options."
+msgstr ""
+#
+msgid "Options for |project|"
+msgstr ""
+#
+msgid "Name"
+msgstr ""
+#
+msgid "Type"
+msgstr ""
+#
+msgid "Default value"
+msgstr ""
+#
+msgid "Description"
+msgstr ""
+#
+msgid "check"
+msgstr ""
+#
+msgid "integer"
+msgstr ""
+#
+msgid "n/a"
+msgstr ""
+#
+msgid ""
+"The delay (in seconds) between two consecutive lag checks. This should not be "
+"set to high to avoir risking a disconnection due to a timeout between checks "
+"(thus defeating the whole point of this module). However, it should not be "
+"set too low either to avoid flooding the IRC server with lag checks. A delay "
+"of 60 seconds (1 minute) seems reasonable."
+msgstr ""
+#
+msgid "reconnect"
+msgstr ""
+#
+msgid ""
+"The delay the bot will wait after disconnecting from an IRC server due to "
+"high latency before an attempt is made to reconnect. This is meant to delay "
+"operations a little so that the latency gets lower and to implement some kind "
+"of \"reconnection throttling\". You should probably set this to a value "
+"higher or equal to the value for the ``check`` option."
+msgstr ""
+#
+msgid "timeout"
+msgstr ""
+#
+msgid ""
+"The number of seconds the bot will wait for a response after it sends a "
+"periodic latency check. If no response is received by then, this module will "
+"consider the connection to be unresponsive and will (possibly forcefully) "
+"disconnect the bot from the associated IRC server. You may set this to a low "
+"value on broadband connections (eg. 5 seconds)."
+msgstr ""
+#
+msgid "trigger"
+msgstr ""
+#
+msgid "string"
+msgstr ""
+#
+msgid "\"lag\""
+msgstr ""
+#
+msgid "The command to use to ask the bot about the current lag."
+msgstr ""
+#
+msgid ""
+"Depending on your connection, setting the value of the ``timeout`` option to "
+"a value that is too low may result in excessive cycles of disconnections and "
+"reconnections from/to IRC servers."
+msgstr ""
+#
+msgid ""
+"The trigger should only contain alphanumeric characters (in particular, do "
+"not add any prefix, like \"!\" to that value)."
+msgstr ""
+#
+msgid "Example"
+msgstr ""
+#
+msgid ""
+"In this example, we configure the bot to check the latency every 2 minutes "
+"(120 seconds). The IRC server has 15 seconds to respond to our latency "
+"checks. If it does not answer by then, the bot will disconnect from that IRC "
+"server and will wait for another full minute before attempting a "
+"reconnection. Moreover, the command \"!latency\" can be used at any time to "
+"display the current latency."
+msgstr ""
