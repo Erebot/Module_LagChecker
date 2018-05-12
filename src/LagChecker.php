@@ -110,7 +110,7 @@ class LagChecker extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpE
 
             foreach ($handlers as $callback => $eventType) {
                 $handler = new \Erebot\EventHandler(
-                    \Erebot\CallableWrapper::wrap(array($this, $callback)),
+                    array($this, $callback),
                     new \Erebot\Event\Match\Type($eventType)
                 );
                 $this->connection->addEventHandler($handler);
@@ -136,7 +136,7 @@ class LagChecker extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpE
             }
 
             $handler = new \Erebot\EventHandler(
-                \Erebot\CallableWrapper::wrap(array($this, 'handleGetLag')),
+                array($this, 'handleGetLag'),
                 new \Erebot\Event\Match\All(
                     new \Erebot\Event\Match\Type(
                         '\\Erebot\\Interfaces\\Event\\Base\\TextMessage'
@@ -234,7 +234,7 @@ class LagChecker extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpE
     {
         $timerCls = $this->getFactory('!Timer');
         $this->timerPong = new $timerCls(
-            \Erebot\CallableWrapper::wrap(array($this, 'disconnect')),
+            array($this, 'disconnect'),
             $this->delayPong,
             false
         );
@@ -331,7 +331,7 @@ class LagChecker extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpE
 
         $timerCls = $this->getFactory('!Timer');
         $this->timerQuit = new $timerCls(
-            \Erebot\CallableWrapper::wrap(array($this, 'reconnect')),
+            array($this, 'reconnect'),
             $this->delayReco,
             true
         );
@@ -472,7 +472,7 @@ class LagChecker extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpE
     ) {
         $timerCls = $this->getFactory('!Timer');
         $this->timerPing = new $timerCls(
-            \Erebot\CallableWrapper::wrap(array($this, 'checkLag')),
+            array($this, 'checkLag'),
             $this->delayPing,
             true
         );
